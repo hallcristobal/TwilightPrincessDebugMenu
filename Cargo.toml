@@ -15,5 +15,4 @@ panic = "abort"
 lto = true
 
 [dependencies]
-gcn = { git = "https://github.com/CryZe/gcn", rev = "00cacaad3e3eb2ed2bd54a4a1ab6c3a469a8b96f" }
-gcn-fonts = { git = "https://github.com/CryZe/gcn-fonts", rev = "05fdb050023281ab9e77d9838b3d71c682723f1c" }
+gcn-fonts = { git = "https://github.com/hallcristobal/gcn-fonts", rev = "c0109dbc59ac8fa7100b71fa5bd5d7ed0f26ff3f" }
