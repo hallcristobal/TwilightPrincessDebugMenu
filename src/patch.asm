@@ -5,3 +5,12 @@ u32 0x3c608050
 
 0x802e7648:
 b draw
+
+0x80006444:
+bl game_loop
+bl 0x80018a6c ; fapGm_Execute
+bl 0x80007164 ; mDoAud_Execute
+
+
+0x8034f19c:
+b read_controller

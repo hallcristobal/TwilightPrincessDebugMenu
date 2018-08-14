@@ -1,7 +1,7 @@
 [info]
-game-name = "Twilight Princess Example"
-full-game-name = "The Legend of Zelda: Twilight Princess"
-developer-name = "MidKnight"
+game-name = "TP:GZ"
+full-game-name = "The Legend of Zelda: Twilight Princess Debug"
+developer-name = "Twilight Princess Community"
 full-developer-name = "Speedrun Community"
 
 [src]
@@ -12,8 +12,8 @@ map = "map/Final/Release/frameworkF.map"
 
 [build]
 map = "target/framework.map"
-iso = "target/rom_hack.iso"
+iso = "target/tpgz.iso"
 
 [link]
-entries = ["draw"]
+entries = ["draw", "game_loop", "read_controller"]
 base = "0x8046_0000"

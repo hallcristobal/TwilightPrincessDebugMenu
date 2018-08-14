@@ -15,4 +15,8 @@ panic = "abort"
 lto = true
 
 [dependencies]
+arrayvec = { version = "0.4.7", default-features = false }
+lazy_static = { version = "1.0.1", features=["spin_no_std"] }
+libtp = { path = "libtp" }
 gcn-fonts = { git = "https://github.com/hallcristobal/gcn-fonts", rev = "c0109dbc59ac8fa7100b71fa5bd5d7ed0f26ff3f" }
+gcn = { git = "https://github.com/CryZe/gcn", rev = "ea0f9ce98789d8e0c21a7e813d9a16ee6235c35d" }
