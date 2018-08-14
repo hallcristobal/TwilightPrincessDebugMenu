@@ -1,5 +1,5 @@
 #![no_std]
-#![feature(const_fn, panic_implementation, proc_macro_non_items)]
+#![feature(proc_macro_non_items)]
 #![allow(non_upper_case_globals)]
 
 extern crate arrayvec;
@@ -19,20 +19,7 @@ pub mod menu;
 pub mod print;
 pub mod settings;
 pub mod utils;
-
-use core::panic::PanicInfo;
-
-#[panic_implementation]
-#[no_mangle]
-pub fn my_panic(info: &PanicInfo) -> ! {
-    use core::fmt::Write;
-    let mut message = arrayvec::ArrayString::<[u8; 1024]>::new();
-    write!(message, "{}\0", info).ok();
-    unsafe {
-        gcn::os::report(message.as_ptr());
-    }
-    loop {}
-}
+pub mod popups;
 
 pub static mut visible: bool = false;
 
@@ -49,7 +36,10 @@ unsafe fn get_state() -> &'static mut State {
     STATE.get_or_insert_with(|| State {
         font: FONT.upload(),
         menu: menu::Menu::default(),
-        settings: settings::default_settings(),
+        settings:     settings::Settings {
+        drop_shadow: true,
+        max_lines: 16,
+    },
     })
 }
 
@@ -60,10 +50,12 @@ pub extern "C" fn game_loop() {
 
     if unsafe { visible } {
         utils::render();
-    } else if d_down && rt_down {
+    } else if d_down && rt_down && unsafe { !popups::visible } {
         unsafe {
             visible = true;
         }
+    } else {
+        popups::check_global_flags();
     }
 }
 
@@ -74,4 +66,5 @@ pub unsafe extern "C" fn draw() {
         get_state().menu.draw();
     }
     memory::render_watches();
+    popups::draw_popup();
 }

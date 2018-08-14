@@ -37,34 +37,24 @@ impl Button {
 }
 
 static mut button_states: [ButtonState; 12] = [
-    ButtonState::new(controller::DPAD_LEFT),
-    ButtonState::new(controller::DPAD_RIGHT),
-    ButtonState::new(controller::DPAD_DOWN),
-    ButtonState::new(controller::DPAD_UP),
-    ButtonState::new(controller::Z),
-    ButtonState::new(controller::R),
-    ButtonState::new(controller::L),
-    ButtonState::new(controller::A),
-    ButtonState::new(controller::B),
-    ButtonState::new(controller::X),
-    ButtonState::new(controller::Y),
-    ButtonState::new(controller::START),
+    ButtonState { button: controller::DPAD_LEFT, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::DPAD_RIGHT, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::DPAD_DOWN, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::DPAD_UP, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::Z, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::R, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::L, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::A, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::B, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::X, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::Y, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState { button: controller::START, pressed_frame: 0xFFFFFFFF, is_down: false },
 ];
 
 struct ButtonState {
     button: u16,
     pressed_frame: u32,
     is_down: bool,
-}
-
-impl ButtonState {
-    const fn new(button: u16) -> Self {
-        ButtonState {
-            button: button,
-            pressed_frame: 0xFFFFFFFF,
-            is_down: false,
-        }
-    }
 }
 
 static mut buttons_pressed: u16 = 0;
