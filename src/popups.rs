@@ -8,7 +8,7 @@ use libtp::Addr;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Flag(pub Addr, pub u8);
-static mut global_flags_cache: [u8; 100] = [0; 100];
+static mut global_flags_cache: [u8; 420] = [0; 420]; // 804069B0 -> 80406B53
 static mut end_frame: u32 = 0;
 pub static mut visible: bool = false;
 static mut flag: Flag = Flag(0, 0);
