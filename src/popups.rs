@@ -1,10 +1,9 @@
-use core::fmt::Write;
-use print;
 use arrayvec::ArrayString;
+use core::fmt::Write;
 use libtp::system::get_frame_count;
 use libtp::system::memory::read;
 use libtp::Addr;
-
+use print;
 
 #[derive(Copy, Clone, Eq, PartialEq)]
 pub struct Flag(pub Addr, pub u8);
@@ -28,9 +27,7 @@ pub fn check_global_flags() {
             for bit in 0..8 {
                 if diff & (1 << bit) != 0 {
                     show_popup(addr, bit);
-        report!("Flag {:02X} {} has been set",
-            0xFF & addr,
-            bit);
+                    report!("Flag {:02X} {} has been set", 0xFF & addr, bit);
                 }
             }
             *cached_value |= diff;
@@ -50,9 +47,9 @@ pub fn draw_popup() {
     if unsafe { visible } {
         let Flag(addr, bit) = unsafe { flag };
         let mut string = ArrayString::<[u8; 10]>::new();
-            let _ = write!(string, "Flag {:02X} {} has been set",
-            0xFF & addr,
-            bit);
-            unsafe { print::printf(string.as_str(), 50.5, 50.5, 0xFF_FF_FF_FF); }
+        let _ = write!(string, "Flag {:02X} {} has been set", 0xFF & addr, bit);
+        unsafe {
+            print::printf(string.as_str(), 50.5, 50.5, 0xFF_FF_FF_FF);
+        }
     }
 }

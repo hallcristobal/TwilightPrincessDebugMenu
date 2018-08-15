@@ -182,16 +182,106 @@ impl Debug for Watch {
 lazy_static! {
     pub static ref ITEMS: Mutex<ArrayVec<[Watch; 128]>> = {
         let mut vec = ArrayVec::new();
-        vec.push(Watch { addr: 0x803dce54, x: 429.0, y: 294.0, t: Type::f32, hex: false, visible: true, val_addr: 0, offset: Some(0x5c) });
-        vec.push(Watch { addr: 0x803dce54, x: 429.0, y: 314.0, t: Type::u16, hex: false, visible: true, val_addr: 0, offset: Some(0x16) });
-        vec.push(Watch { addr: 0x803dce54, x: 450.0, y: 338.0, t: Type::f32, hex: false, visible: true, val_addr: 0, offset: Some(0x0) });
-        vec.push(Watch { addr: 0x803dce54, x: 450.0, y: 358.0, t: Type::f32, hex: false, visible: true, val_addr: 0, offset: Some(0x4) });
-        vec.push(Watch { addr: 0x803dce54, x: 450.0, y: 378.0, t: Type::f32, hex: false, visible: true, val_addr: 0, offset: Some(0x8) });
-        vec.push(Watch { addr: 0x8040afc0, x: 412.0, y: 330.0, t: Type::String, hex: false, visible: false, val_addr: 0, offset: None });
-        vec.push(Watch { addr: 0x8042d3e0, x: 412.0, y: 330.0, t: Type::u8, hex: false, visible: false, val_addr: 0, offset: None });
-        vec.push(Watch { addr: 0x803a66b3, x: 412.0, y: 330.0, t: Type::i8, hex: false, visible: false, val_addr: 0, offset: None });
-        vec.push(Watch { addr: 0x8040afc9, x: 412.0, y: 330.0, t: Type::u8, hex: true, visible: false, val_addr: 0, offset: None });
-        vec.push(Watch { addr: 0x80450c98, x: 412.0, y: 330.0, t: Type::u8, hex: false, visible: false, val_addr: 0, offset: None });
+        vec.push(Watch {
+            addr: 0x803dce54,
+            x: 429.0,
+            y: 294.0,
+            t: Type::f32,
+            hex: false,
+            visible: true,
+            val_addr: 0,
+            offset: Some(0x5c),
+        });
+        vec.push(Watch {
+            addr: 0x803dce54,
+            x: 429.0,
+            y: 314.0,
+            t: Type::u16,
+            hex: false,
+            visible: true,
+            val_addr: 0,
+            offset: Some(0x16),
+        });
+        vec.push(Watch {
+            addr: 0x803dce54,
+            x: 450.0,
+            y: 338.0,
+            t: Type::f32,
+            hex: false,
+            visible: true,
+            val_addr: 0,
+            offset: Some(0x0),
+        });
+        vec.push(Watch {
+            addr: 0x803dce54,
+            x: 450.0,
+            y: 358.0,
+            t: Type::f32,
+            hex: false,
+            visible: true,
+            val_addr: 0,
+            offset: Some(0x4),
+        });
+        vec.push(Watch {
+            addr: 0x803dce54,
+            x: 450.0,
+            y: 378.0,
+            t: Type::f32,
+            hex: false,
+            visible: true,
+            val_addr: 0,
+            offset: Some(0x8),
+        });
+        vec.push(Watch {
+            addr: 0x8040afc0,
+            x: 412.0,
+            y: 330.0,
+            t: Type::String,
+            hex: false,
+            visible: false,
+            val_addr: 0,
+            offset: None,
+        });
+        vec.push(Watch {
+            addr: 0x8042d3e0,
+            x: 412.0,
+            y: 330.0,
+            t: Type::u8,
+            hex: false,
+            visible: false,
+            val_addr: 0,
+            offset: None,
+        });
+        vec.push(Watch {
+            addr: 0x803a66b3,
+            x: 412.0,
+            y: 330.0,
+            t: Type::i8,
+            hex: false,
+            visible: false,
+            val_addr: 0,
+            offset: None,
+        });
+        vec.push(Watch {
+            addr: 0x8040afc9,
+            x: 412.0,
+            y: 330.0,
+            t: Type::u8,
+            hex: true,
+            visible: false,
+            val_addr: 0,
+            offset: None,
+        });
+        vec.push(Watch {
+            addr: 0x80450c98,
+            x: 412.0,
+            y: 330.0,
+            t: Type::u8,
+            hex: false,
+            visible: false,
+            val_addr: 0,
+            offset: None,
+        });
         Mutex(RefCell::new(vec))
     };
 }
@@ -286,9 +376,9 @@ pub fn render() {
                         current_watch.visible = !current_watch.visible;
                     } else if word_cursor == 0 {
                         PHASE = SelectedPhase::Char;
-                    } else if word_cursor == 5  && current_watch.offset.is_some() {
+                    } else if word_cursor == 5 && current_watch.offset.is_some() {
                         PHASE = SelectedPhase::Char;
-                    }else if word_cursor == 3 {
+                    } else if word_cursor == 3 {
                         current_watch.hex = !current_watch.hex;
                     }
                 }
@@ -413,33 +503,33 @@ pub fn render() {
                         5 => {
                             if let Some(offset) = current_watch.offset {
                                 match char_cursor {
-                                2 => {
-                                    if offset < 0xEFFF {
-                                        current_watch.offset = offset.checked_add(0x1000);
+                                    2 => {
+                                        if offset < 0xEFFF {
+                                            current_watch.offset = offset.checked_add(0x1000);
+                                        }
                                     }
-                                }
-                                3 => {
-                                    if offset < 0xFEFF {
-                                        current_watch.offset = offset.checked_add(0x100);
+                                    3 => {
+                                        if offset < 0xFEFF {
+                                            current_watch.offset = offset.checked_add(0x100);
+                                        }
                                     }
-                                }
-                                4 => {
-                                    if offset < 0xFFEF {
-                                        current_watch.offset = offset.checked_add(0x10);
+                                    4 => {
+                                        if offset < 0xFFEF {
+                                            current_watch.offset = offset.checked_add(0x10);
+                                        }
                                     }
-                                }
-                                5 => {
-                                    if offset < 0xFFFE {
-                                        current_watch.offset = offset.checked_add(0x1);
+                                    5 => {
+                                        if offset < 0xFFFE {
+                                            current_watch.offset = offset.checked_add(0x1);
+                                        }
                                     }
+                                    _ => {}
                                 }
-                                _ => {}
+                            } else {
+                                current_watch.offset = Some(1);
                             }
-                        } else {
-                            current_watch.offset = Some(1);
                         }
-                    },
-                    _ => {}
+                        _ => {}
                     }
                 } else if pressed_d {
                     match word_cursor {
@@ -484,46 +574,46 @@ pub fn render() {
                         5 => {
                             if let Some(offset) = current_watch.offset {
                                 match char_cursor {
-                                2 => {
-                                    if offset > 0x0FFF {
-                                        if let Some(a) = (offset).checked_sub(0x1000) {
-                                            current_watch.offset = Some(a);
-                                        } else {
-                                            current_watch.offset = None;
+                                    2 => {
+                                        if offset > 0x0FFF {
+                                            if let Some(a) = (offset).checked_sub(0x1000) {
+                                                current_watch.offset = Some(a);
+                                            } else {
+                                                current_watch.offset = None;
+                                            }
                                         }
                                     }
-                                }
-                                3 => {
-                                    if offset > 0x00FF {
-                                        if let Some(a) = (offset).checked_sub(0x100) {
-                                            current_watch.offset = Some(a);
-                                        } else {
-                                            current_watch.offset = None;
+                                    3 => {
+                                        if offset > 0x00FF {
+                                            if let Some(a) = (offset).checked_sub(0x100) {
+                                                current_watch.offset = Some(a);
+                                            } else {
+                                                current_watch.offset = None;
+                                            }
                                         }
                                     }
-                                }
-                                4 => {
-                                    if offset > 0x000F {
-                                        if let Some(a) = (offset).checked_sub(0x10) {
-                                            current_watch.offset = Some(a);
-                                        } else {
-                                            current_watch.offset = None;
+                                    4 => {
+                                        if offset > 0x000F {
+                                            if let Some(a) = (offset).checked_sub(0x10) {
+                                                current_watch.offset = Some(a);
+                                            } else {
+                                                current_watch.offset = None;
+                                            }
                                         }
                                     }
-                                }
-                                5 => {
-                                    if offset > 0x0000 {
-                                        if let Some(a) = (offset).checked_sub(0x1) {
-                                            current_watch.offset = Some(a);
-                                        } else {
-                                            current_watch.offset = None;
+                                    5 => {
+                                        if offset > 0x0000 {
+                                            if let Some(a) = (offset).checked_sub(0x1) {
+                                                current_watch.offset = Some(a);
+                                            } else {
+                                                current_watch.offset = None;
+                                            }
                                         }
                                     }
+                                    _ => {}
                                 }
-                                _ => {}
                             }
                         }
-                    }
                         _ => {}
                     }
                 }
@@ -533,7 +623,10 @@ pub fn render() {
         }
     }
     let lines = menu.lines_mut();
-    let _ = write!(lines[0].begin(), "Address  X    Y    Hex   Type  Offset  Show");
+    let _ = write!(
+        lines[0].begin(),
+        "Address  X    Y    Hex   Type  Offset  Show"
+    );
     for (index, (line, content)) in lines
         .into_iter()
         .skip(1)

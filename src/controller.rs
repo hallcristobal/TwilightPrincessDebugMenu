@@ -1,3 +1,4 @@
+use commands;
 use libtp::game::controller;
 use libtp::system;
 
@@ -37,18 +38,66 @@ impl Button {
 }
 
 static mut button_states: [ButtonState; 12] = [
-    ButtonState { button: controller::DPAD_LEFT, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::DPAD_RIGHT, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::DPAD_DOWN, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::DPAD_UP, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::Z, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::R, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::L, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::A, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::B, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::X, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::Y, pressed_frame: 0xFFFFFFFF, is_down: false },
-    ButtonState { button: controller::START, pressed_frame: 0xFFFFFFFF, is_down: false },
+    ButtonState {
+        button: controller::DPAD_LEFT,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::DPAD_RIGHT,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::DPAD_DOWN,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::DPAD_UP,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::Z,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::R,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::L,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::A,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::B,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::X,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::Y,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
+    ButtonState {
+        button: controller::START,
+        pressed_frame: 0xFFFFFFFF,
+        is_down: false,
+    },
 ];
 
 struct ButtonState {
@@ -75,6 +124,7 @@ pub extern "C" fn read_controller() -> u32 {
             }
         }
     }
+
     if unsafe { debug_menu_visible } {
         controller::set_buttons_down(0x0);
         controller::set_buttons_pressed(0x0);
@@ -82,6 +132,8 @@ pub extern "C" fn read_controller() -> u32 {
             controller::PAD_STATUS.sval = 0x0;
             controller::PAD_BUTTON.sval = 0x0;
         }
+    } else {
+        commands::process_inputs();
     }
     0x80000000
 }

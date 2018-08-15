@@ -156,7 +156,7 @@ impl<'a> Write for LineWriter<'a> {
         if s.len() > 128 {
             self.line.push_str(&s[..128]);
         } else {
-        self.line.push_str(s);
+            self.line.push_str(s);
         }
         self.position += s.len();
         Ok(())

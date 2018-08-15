@@ -1,5 +1,6 @@
 #![no_std]
 #![feature(proc_macro_non_items)]
+#![feature(const_fn)]
 #![allow(non_upper_case_globals)]
 
 extern crate arrayvec;
@@ -12,14 +13,16 @@ extern crate lazy_static;
 
 use gcn_fonts::prelude::*;
 
+pub mod cheat_menu;
+pub mod commands;
 pub mod controller;
 pub mod main_menu;
 pub mod memory;
 pub mod menu;
+pub mod popups;
 pub mod print;
 pub mod settings;
 pub mod utils;
-pub mod popups;
 
 pub static mut visible: bool = false;
 
@@ -36,21 +39,23 @@ unsafe fn get_state() -> &'static mut State {
     STATE.get_or_insert_with(|| State {
         font: FONT.upload(),
         menu: menu::Menu::default(),
-        settings:     settings::Settings {
-        drop_shadow: true,
-        max_lines: 16,
-    },
+        settings: settings::Settings {
+            drop_shadow: true,
+            max_lines: 16,
+        },
     })
 }
 
 #[no_mangle]
 pub extern "C" fn game_loop() {
+    cheat_menu::apply_cheats();
     let d_down = controller::DPAD_DOWN.is_pressed();
     let rt_down = controller::R.is_down();
+    let lt_down = controller::L.is_down();
 
     if unsafe { visible } {
         utils::render();
-    } else if d_down && rt_down && unsafe { !popups::visible } {
+    } else if d_down && rt_down && lt_down && unsafe { !popups::visible } {
         unsafe {
             visible = true;
         }
