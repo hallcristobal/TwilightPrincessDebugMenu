@@ -34,13 +34,29 @@ impl Cheat {
 
 pub fn apply_cheats() {
     for cheat in unsafe { &cheats } {
-        // if cheat.active {
-        //     match cheat.id {
-        //     }
-        // } else {
-        //     match cheat.id {
-        //     }
-        // }
+        if cheat.active {
+            match cheat.id {
+                Invincible => {}
+InvincibleEnemies => {}
+InfiniteAir => {}
+InifinteBombs => {}
+InfiniteRupees => {}
+InfiniteArrows => {}
+MoonJumpEnabled => {}
+TeleportEnabled => {}
+            }
+        } else {
+            match cheat.id {
+                Invincible => {}
+InvincibleEnemies => {}
+InfiniteAir => {}
+InifinteBombs => {}
+InfiniteRupees => {}
+InfiniteArrows => {}
+MoonJumpEnabled => {}
+TeleportEnabled => {}
+            }
+        }
     }
 }
 

@@ -1,5 +1,5 @@
 use libtp::game::controller;
-use libtp::system::{memory, ZEL_AUDIO};
+use libtp::system::{memory, ZEL_AUDIO, GAME_INFO};
 use libtp::{addrs, Addr};
 
 pub static mut doing_cheats: bool = false;
@@ -10,17 +10,22 @@ pub struct Command {
     pub command: fn(),
 }
 
-pub static mut COMMANDS: [Command; 2] = [
+pub static mut COMMANDS: [Command; 3] = [
     Command {
-        active: false,
+        active: true,
         buttons: 0x0028,
         command: store_position,
     },
     Command {
-        active: false,
+        active: true,
         buttons: 0x0024,
         command: load_position,
     },
+    Command {
+        active: true,
+        buttons: 0x0120,
+        command: moon_jump,
+    }
 ];
 
 static mut saved_x: f32 = 0.0;
@@ -83,19 +88,18 @@ fn load_position() {
     }
 }
 
-// fn moon_jump() {
-// 	unsafe {
-// 		let ptr = memory::read::<Addr>(0x8040_B878);
-// 		if ptr > 0x8000_0000 && ptr < 0x8FFF_FFFF {
-// 			let v = memorry::read()
-// 		}
-// 	}
-// }
+fn moon_jump() {
+	unsafe {
+		if let Some(ref mut momentum) = GAME_INFO.momentum_ptr {
+            (*momentum).link_momentum.y = 56.0;
+        }
+	}
+}
 
 pub fn process_inputs() {
     unsafe {
         COMMANDS.iter_mut().for_each(|c| {
-            if controller::PAD_STATUS.sval == c.buttons {
+            if c.active && controller::PAD_STATUS.sval == c.buttons {
                 (c.command)();
 				controller::set_buttons_down(0x0);
 				controller::set_buttons_pressed(0x0);
