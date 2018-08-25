@@ -1,8 +1,8 @@
 use core::fmt::Write;
-use libtp::system;
+use libtp::link::{Inventory, Link};
 
-use controller;
 use utils::*;
+use {commands, controller};
 
 static mut cursor: usize = 0;
 static mut scroll_offset: usize = 0;
@@ -32,29 +32,68 @@ impl Cheat {
     }
 }
 
+//Infinite Health (Link):
+//Infinite Health (Enemies):
+//Infinite Air:
+//Infinite Bombs:
+//Infinite Rupees:
+//Moonjump (R+A):
+//Teleporter (R+D-Up/Down):
+//Super Spinner:
+//Fast Reset (Start):
+//"Gorge Void Practice (L+R):
+//Rupee Roll Practice (L+Z):
+//Get Boss Flag (R+Z):
+//Get Storage (D-Down):
+
 pub fn apply_cheats() {
+    let link = Link::get_link();
+    let inventory = Inventory::get_inventory();
     for cheat in unsafe { &cheats } {
         if cheat.active {
             match cheat.id {
-                Invincible => {}
-InvincibleEnemies => {}
-InfiniteAir => {}
-InifinteBombs => {}
-InfiniteRupees => {}
-InfiniteArrows => {}
-MoonJumpEnabled => {}
-TeleportEnabled => {}
+                Invincible => {
+                    link.heart_quarters = (link.heart_pieces / 5) * 4;
+                }
+                InvincibleEnemies => {}
+                InfiniteAir => {}
+                InifinteBombs => {
+                    inventory.bomb_bag_1_amnt = 99;
+                    inventory.bomb_bag_2_amnt = 99;
+                    inventory.bomb_bag_3_amnt = 99;
+                }
+                InfiniteRupees => {
+                    link.rupees = 1000;
+                }
+                InfiniteArrows => {
+                    inventory.arrow_count = 99;
+                }
+                MoonJumpEnabled => unsafe {
+                    commands::COMMANDS[commands::MOON_JUMP].active = true;
+                },
+                TeleportEnabled => {
+                    unsafe {
+                        commands::COMMANDS[commands::LOAD_POSITION].active = true;
+                    }
+                    unsafe {
+                        commands::COMMANDS[commands::STORE_POSITION].active = true;
+                    }
+                }
             }
         } else {
             match cheat.id {
-                Invincible => {}
-InvincibleEnemies => {}
-InfiniteAir => {}
-InifinteBombs => {}
-InfiniteRupees => {}
-InfiniteArrows => {}
-MoonJumpEnabled => {}
-TeleportEnabled => {}
+                MoonJumpEnabled => unsafe {
+                    commands::COMMANDS[commands::MOON_JUMP].active = false;
+                },
+                TeleportEnabled => {
+                    unsafe {
+                        commands::COMMANDS[commands::LOAD_POSITION].active = false;
+                    }
+                    unsafe {
+                        commands::COMMANDS[commands::STORE_POSITION].active = false;
+                    }
+                }
+                _ => {}
             }
         }
     }
@@ -74,13 +113,13 @@ static mut cheats: [Cheat; 8] = [
 #[derive(Copy, Clone)]
 enum CheatId {
     Invincible,
-	InvincibleEnemies,
-	InfiniteAir,
-	InifinteBombs,
-	InfiniteRupees,
-	InfiniteArrows,
-	MoonJumpEnabled,
-	TeleportEnabled,
+    InvincibleEnemies,
+    InfiniteAir,
+    InifinteBombs,
+    InfiniteRupees,
+    InfiniteArrows,
+    MoonJumpEnabled,
+    TeleportEnabled,
 }
 
 use self::CheatId::*;

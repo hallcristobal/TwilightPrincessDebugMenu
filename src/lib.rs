@@ -16,6 +16,7 @@ use gcn_fonts::prelude::*;
 pub mod cheat_menu;
 pub mod commands;
 pub mod controller;
+pub mod inventory;
 pub mod main_menu;
 pub mod memory;
 pub mod menu;

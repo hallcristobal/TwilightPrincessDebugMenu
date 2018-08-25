@@ -74,4 +74,9 @@ macro_rules! define_menu {
 
 pub static mut menu_state: MenuState = MenuState::MainMenu;
 
-define_menu!((MainMenu, main_menu), (Memory, memory));
+define_menu!(
+    (MainMenu, main_menu),
+    (Memory, memory),
+    (InventoryMenu, inventory),
+    (CheatMenu, cheat_menu)
+);

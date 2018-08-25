@@ -10,6 +10,8 @@ pub fn transition_into() {}
 
 pub fn render() {
     const MEMORY_INDEX: usize = 0;
+    const INVENTORY_INDEX: usize = 1;
+    const CHEAT_INDEX: usize = 2;
 
     let state = unsafe { get_state() };
     let lines = state.menu.lines_mut();
@@ -23,14 +25,25 @@ pub fn render() {
         return;
     }
 
-    let contents = ["Memory"];
+    let contents = ["Memory", "Inventory", "Cheat Menu"];
 
     move_cursor(contents.len(), unsafe { &mut cursor });
 
     if pressed_a {
-        if unsafe { cursor } == MEMORY_INDEX {
-            transition(MenuState::Memory);
-            return;
+        match unsafe { cursor } {
+            MEMORY_INDEX => {
+                transition(MenuState::Memory);
+                return;
+            }
+            INVENTORY_INDEX => {
+                transition(MenuState::InventoryMenu);
+                return;
+            }
+            CHEAT_INDEX => {
+                transition(MenuState::CheatMenu);
+                return;
+            }
+            _ => {}
         }
     }
 
