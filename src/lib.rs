@@ -61,7 +61,7 @@ pub extern "C" fn game_loop() {
             visible = true;
         }
     } else {
-        popups::check_global_flags();
+        // popups::check_global_flags();
     }
 }
 

@@ -12,9 +12,9 @@ pub fn transition_into() {}
 
 const MENU_ITEM_INVENTORY: usize = 0;
 const MENU_ITEM_QUEST: usize = 1;
-const MENU_ITEM_AMOUNTS: usize = 2;
+// const MENU_ITEM_AMOUNTS: usize = 2;
 
-const ITEMS: [&str; 1] = ["Inventory Menu" /*, "Quest Menu", "Amounts"*/];
+const ITEMS: [&str; 2] = ["Item Wheel" , "Collection Menu",/* "Amounts"*/];
 
 pub fn render() {
     let state = unsafe { get_state() };
@@ -36,10 +36,10 @@ pub fn render() {
                 inv_menu_state = InventoryMenu::Equipment;
                 transition(MenuState::InventoryMenu);
                 return;
-            } //else if cursor == MENU_ITEM_QUEST {
-              //     inv_menu_state = InventoryMenu::Quest;
-              //     transition(MenuState::InventoryMenu);
-              // } else if cursor == MENU_ITEM_AMOUNTS {
+            } else if cursor == MENU_ITEM_QUEST {
+                  inv_menu_state = InventoryMenu::Quest;
+                  transition(MenuState::InventoryMenu);
+            } //else if cursor == MENU_ITEM_AMOUNTS {
               //     inv_menu_state = InventoryMenu::Amounts;
               //     transition(MenuState::InventoryMenu);
               //     return;
@@ -51,11 +51,9 @@ pub fn render() {
 
     for (index, (line, item)) in lines.into_iter().zip(ITEMS.iter()).enumerate() {
         let index = index;
+        let _ = write!(line.begin(), "{}", item);
         if index == unsafe { cursor } {
-            let _ = write!(line.begin(), "> ");
-        } else {
-            let _ = write!(line.begin(), "  ");
+            line.selected = true;
         }
-        let _ = write!(line.append(), "{}", item);
     }
 }

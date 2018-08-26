@@ -2,32 +2,14 @@ use super::super::get_state;
 use core::fmt::Write;
 use libtp::link::inventory::Inventory;
 use libtp::link::item::*;
-use super::super::utils::{MenuState, transition};
+use super::super::utils::{MenuState, transition, scroll_move_cursor};
 
 use super::{inv_menu_state, InventoryMenu};
 use controller;
 
 static mut cursor: usize = 0;
 
-pub fn scroll_move_cursor() {
-    if controller::DPAD_UP.is_pressed() && unsafe { cursor } > 0 {
-        unsafe {
-            cursor -= 1;
-            if cursor >= 4 && cursor - 4 < scroll_offset {
-                scroll_offset = cursor - 4;
-            }
-        }
-    } else if controller::DPAD_DOWN.is_pressed() && unsafe { cursor + 1 } < ITEM_SLOTS.len() {
-        unsafe {
-            cursor += 1;
-            if cursor + 4 < ITEM_SLOTS.len() && cursor > scroll_offset + 20 {
-                scroll_offset = cursor - 20;
-            }
-        }
-    }
-}
-
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Debug)]
 enum ItemType {
     SingleItem(u8),
     Bottle,
@@ -40,31 +22,32 @@ enum ItemType {
 }
 
 use self::ItemType::*;
+use libtp::link::inventory::*;
 
-const ITEM_SLOTS: [(&str, ItemType); 23] = [
-    ("Double Clawshots:", SingleItem(DOUBLE_CLAWSHOTS)),
-    ("Dominion Rod:", SingleItem(DOMINION_ROD)),
-    ("Ball Chain:", SingleItem(BALL_CHAIN)),
-    ("Spinner:", SingleItem(SPINNER)),
-    ("Heros Bow:", SingleItem(HEROS_BOW)),
-    ("Iron Boots:", SingleItem(IRON_BOOTS)),
-    ("Boomerang:", SingleItem(BOOMERANG)),
-    ("Lantern:", SingleItem(LANTERN)),
-    ("Slingshot:", SingleItem(SLINGSHOT)),
-    ("Clawshot:", SingleItem(CLAWSHOT)),
-    ("Fishing Rod:", FishingRod),
-    ("Hawkeye:", SingleItem(HAWKEYE)),
-    ("Bomb Bag1 1:", Bombs),
-    ("Bomb Bag1 2:", Bombs),
-    ("Bomb Bag1 3:", Bombs),
-    ("Bottle 1:", Bottle),
-    ("Bottle 2:", Bottle),
-    ("Bottle 3:", Bottle),
-    ("Bottle 4:", Bottle),
-    ("Sky Book: ", SkyBook),
-    ("Ilia Quest:", IliaQuest),
-    ("Ooccoo: ", Ooccoo),
-    ("Letter: ", Letter),
+const ITEM_SLOTS: [(&str, ItemType, usize); 23] = [
+    ("Double Clawshots:", SingleItem(DOUBLE_CLAWSHOTS), DOUBLE_CLAWSHOT_ID_VALUE),
+    ("Dominion Rod:", SingleItem(DOMINION_ROD), DOMINION_ROD_ID_VALUE),
+    ("Ball Chain:", SingleItem(BALL_CHAIN), BALL_AND_CHAIN_ID_VALUE),
+    ("Spinner:", SingleItem(SPINNER), SPINNER_ID_VALUE),
+    ("Heros Bow:", SingleItem(HEROS_BOW), HEROS_BOW_ID_VALUE),
+    ("Iron Boots:", SingleItem(IRON_BOOTS), IRON_BOOTS_ID_VALUE),
+    ("Boomerang:", SingleItem(BOOMERANG), GALE_BOOMERANG_ID_VALUE),
+    ("Lantern:", SingleItem(LANTERN), LANTERN_ID_VALUE),
+    ("Slingshot:", SingleItem(SLINGSHOT), SLINGSHOT_ID_VALUE),
+    ("Clawshot:", SingleItem(CLAWSHOT), CLAWSHOT_ID_VALUE),
+    ("Fishing Rod:", FishingRod, FISHING_ROD_ID_VALUE),
+    ("Hawkeye:", SingleItem(HAWKEYE), HAWKEYE_ID_VALUE),
+    ("Bomb Bag1 1:", Bombs, BOMB_BAG_1_ID_VALUE),
+    ("Bomb Bag1 2:", Bombs, BOMB_BAG_2_ID_VALUE),
+    ("Bomb Bag1 3:", Bombs, BOMB_BAG_3_ID_VALUE),
+    ("Bottle 1:", Bottle, BOTTLE_1_ID_VALUE),
+    ("Bottle 2:", Bottle, BOTTLE_2_ID_VALUE),
+    ("Bottle 3:", Bottle, BOTTLE_3_ID_VALUE),
+    ("Bottle 4:", Bottle, BOTTLE_4_ID_VALUE),
+    ("Sky Book: ", SkyBook, SKY_BOOK_ID_VALUE),
+    ("Ilia Quest:", IliaQuest, ILIA_QUEST_ID_VALUE),
+    ("Ooccoo: ", Ooccoo, OOCCOO_ID_VALUE),
+    ("Letter: ", Letter, LETTER_ID_VALUE),
 ];
 
 static mut scroll_offset: usize = 0;
@@ -74,10 +57,9 @@ pub fn transition_into() {}
 fn handle_item_switch() {
     let dpad_left = controller::DPAD_LEFT.is_pressed();
     let dpad_right = controller::DPAD_RIGHT.is_pressed();
-    let item_slot = unsafe { cursor };
     let inventory = Inventory::get_inventory();
+    let (_, item_type, item_slot) = ITEM_SLOTS[unsafe { cursor }];
     let item_id = inventory.get_by_slot_id(item_slot);
-    let (_, item_type) = ITEM_SLOTS[item_slot];
     if dpad_left {
         let new_item_id = match (item_type, item_id) {
             (Bottle, RED_POTION) => EMPTY_BOTTLE,
@@ -122,12 +104,10 @@ fn handle_item_switch() {
             (SkyBook, SKY_BOOK_FILLED) => SKY_BOOK_PARTLY_FILLED,
             _ => EMPTY,
         };
-        if new_item_id == 0xFF {
-            report!("Setting: {} to 0xFF", item_slot);
-        }
         inventory.set_by_slot_id(item_slot, new_item_id);
     } else if dpad_right {
         let new_item_id = match (item_type, item_id) {
+            (Bottle, EMPTY) => EMPTY_BOTTLE,
             (Bottle, EMPTY_BOTTLE) => RED_POTION,
             (Bottle, RED_POTION) => GREEN_POTION,
             (Bottle, GREEN_POTION) => MILK,
@@ -150,29 +130,32 @@ fn handle_item_switch() {
             (Bottle, SIMPLE_SOUP) => GOOD_SOUP,
             (Bottle, GOOD_SOUP) => SUPERB_SOUP,
             (Bottle, SUPERB_SOUP) => BLACK_CHU_JELLY,
+            (Bombs, EMPTY) => EMPTY_BOMB_BAG,
             (Bombs, EMPTY_BOMB_BAG) => REGULAR_BOMBS,
             (Bombs, REGULAR_BOMBS) => WATER_BOMBS,
             (Bombs, WATER_BOMBS) => BOMBLINGS,
+            (Ooccoo, EMPTY) => OOCCOO,
             (Ooccoo, OOCCOO) => OOCCOO_JR,
             (Ooccoo, OOCCOO_JR) => OOCCOOS_NOTE,
+            (Letter, EMPTY) => AURUS_MEMO,
             (Letter, AURUS_MEMO) => ASHEIS_SKETCH,
+            (FishingRod, EMPTY) => FISHING_ROD,
             (FishingRod, FISHING_ROD) => FISHING_ROD_BEE_LARVA,
             (FishingRod, FISHING_ROD_BEE_LARVA) => FISHING_ROD_CORAL_EARRING,
             (FishingRod, FISHING_ROD_CORAL_EARRING) => FISHING_ROD_WORM,
             (FishingRod, FISHING_ROD_WORM) => FISHING_ROD_EARRING_BEE_LARVA,
             (FishingRod, FISHING_ROD_EARRING_BEE_LARVA) => FISHING_ROD_EARRING_WORM,
+            (IliaQuest, EMPTY) => RENARDOS_LETTER,
             (IliaQuest, RENARDOS_LETTER) => INVOICE,
             (IliaQuest, INVOICE) => WOODEN_STATUE,
             (IliaQuest, WOODEN_STATUE) => ILIAS_CHARM,
             (IliaQuest, ILIAS_CHARM) => HORSE_CALL,
+            (SkyBook, EMPTY) => SKY_BOOK_EMPTY,
             (SkyBook, SKY_BOOK_EMPTY) => SKY_BOOK_PARTLY_FILLED,
             (SkyBook, SKY_BOOK_PARTLY_FILLED) => SKY_BOOK_FILLED,
             (SingleItem(x), _) => x,
             (_, x) => x,
         };
-        if new_item_id == 0xFF {
-            report!("Setting: {} to 0xFF", item_slot);
-        }
         inventory.set_by_slot_id(item_slot, new_item_id);
     }
 }
@@ -190,23 +173,24 @@ pub fn render() {
         transition(MenuState::InventoryMenu);
         return;
     }
-
-    scroll_move_cursor();
+    unsafe {
+        scroll_move_cursor(ITEM_SLOTS.len(), &mut cursor, &mut scroll_offset);
+    }
 
     handle_item_switch();
 
     let lines = menu.lines_mut();
-    for (index, (line, &(text, _))) in lines
+    for (index, (line, &(text, _, slot_index))) in lines
         .into_iter()
         .zip(ITEM_SLOTS.iter().skip(unsafe { scroll_offset }))
         .enumerate()
-        .take(25)
+        .take(state.settings.max_lines)
     {
         let index = index + unsafe { scroll_offset };
-        let item_id = inventory.get_by_slot_id(index);
+        let item_id = inventory.get_by_slot_id(slot_index);
         let item_text = item_id_to_str(item_id);
         let _ = write!(line.begin(), "{} {}", text, item_text);
-		if unsafe { index - scroll_offset == cursor } {
+		if unsafe { index  == cursor } {
 			line.selected = true;
 		}
     }

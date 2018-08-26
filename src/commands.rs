@@ -1,5 +1,5 @@
 use libtp::game::controller;
-use libtp::system::{memory, GAME_INFO, ZEL_AUDIO};
+use libtp::system::{memory, ZEL_AUDIO, get_link_momentum};
 use libtp::{addrs, Addr};
 
 pub static mut doing_cheats: bool = false;
@@ -93,10 +93,8 @@ fn load_position() {
 }
 
 fn moon_jump() {
-    unsafe {
-        if let Some(ref mut momentum) = GAME_INFO.momentum_ptr {
-            (*momentum).link_momentum.y = 56.0;
-        }
+    if let Some(ref mut momentum) = get_link_momentum() {
+        (*momentum).link_momentum.y = 56.0;
     }
 }
 
