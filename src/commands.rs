@@ -1,5 +1,5 @@
 use libtp::game::controller;
-use libtp::system::{memory, ZEL_AUDIO, get_link_momentum};
+use libtp::system::{get_link_momentum, memory, ZEL_AUDIO};
 use libtp::{addrs, Addr};
 
 pub static mut doing_cheats: bool = false;

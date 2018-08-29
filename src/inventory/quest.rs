@@ -1,7 +1,7 @@
-use {controller, get_state, utils::*};
 use super::{inv_menu_state, InventoryMenu};
-use libtp::link::{Link, Inventory};
 use core::fmt::Write;
+use libtp::link::{Inventory, Link};
+use {controller, get_state, utils::*};
 
 static mut cursor: usize = 0;
 static mut scroll_offset: usize = 0;
@@ -18,16 +18,16 @@ const WALLET_INDEX: usize = 8;
 const QUIVER_INDEX: usize = 9;
 
 const ITEMS: [&str; 10] = [
-	"Ordon Sword",
-	"Master Sword",
-	"Wooden Shield",
+    "Ordon Sword",
+    "Master Sword",
+    "Wooden Shield",
     "Hylian Shield",
-	"Hero's Clothes",
-	"Zora Armor",
-	"Magic Armor",
+    "Hero's Clothes",
+    "Zora Armor",
+    "Magic Armor",
     "Bomb Upgrade",
-	"Wallet",
-	"Quiver",
+    "Wallet",
+    "Quiver",
 ];
 
 pub fn transition_into() {}
@@ -38,9 +38,9 @@ fn handle_item_switch() {
     let inventory = Inventory::get_inventory();
     let link = Link::get_link();
     if dpad_left {
-        match unsafe {cursor} {
+        match unsafe { cursor } {
             ORDON_SWORD_INDEX => {
-                    inventory.ordon_sword_flag().deactivate();
+                inventory.ordon_sword_flag().deactivate();
             }
             MASTER_SWORD_INDEX => {
                 let light = inventory.light_sword_flag();
@@ -61,20 +61,18 @@ fn handle_item_switch() {
                     ordon.deactivate();
                 }
             }
-            HYLIAN_SHIELD_INDEX => {
-                    inventory.hylian_shield_flag().deactivate()
-            }
+            HYLIAN_SHIELD_INDEX => inventory.hylian_shield_flag().deactivate(),
             HEROS_CLOTHES_INDEX => {
-                    inventory.heros_clothes_flag().deactivate();
+                inventory.heros_clothes_flag().deactivate();
             }
             ZORA_ARMOR_INDEX => {
-                    inventory.zora_armor_flag().deactivate();
+                inventory.zora_armor_flag().deactivate();
             }
             MAGIC_ARMOR_INDEX => {
-                    inventory.magic_armor_flag().deactivate();
+                inventory.magic_armor_flag().deactivate();
             }
             BOMB_UPGRADE_INDEX => {
-                    inventory.bomb_capacity_flag().deactivate();
+                inventory.bomb_capacity_flag().deactivate();
             }
             WALLET_INDEX => {
                 if link.wallet_upgrade == 2 {
@@ -89,13 +87,13 @@ fn handle_item_switch() {
                 } else if inventory.arrow_capacity == 60 {
                     inventory.arrow_capacity = 30;
                 }
-             }
-            _ => unreachable!()
+            }
+            _ => unreachable!(),
         };
     } else if dpad_right {
-        match unsafe {cursor} {
+        match unsafe { cursor } {
             ORDON_SWORD_INDEX => {
-                    inventory.ordon_sword_flag().activate();
+                inventory.ordon_sword_flag().activate();
             }
             MASTER_SWORD_INDEX => {
                 let light = inventory.light_sword_flag();
@@ -116,20 +114,18 @@ fn handle_item_switch() {
                     ordon.deactivate();
                 }
             }
-            HYLIAN_SHIELD_INDEX => {
-                    inventory.hylian_shield_flag().activate()
-            }
+            HYLIAN_SHIELD_INDEX => inventory.hylian_shield_flag().activate(),
             HEROS_CLOTHES_INDEX => {
-                    inventory.heros_clothes_flag().activate();
+                inventory.heros_clothes_flag().activate();
             }
             ZORA_ARMOR_INDEX => {
-                    inventory.zora_armor_flag().activate();
+                inventory.zora_armor_flag().activate();
             }
             MAGIC_ARMOR_INDEX => {
-                    inventory.magic_armor_flag().activate();
+                inventory.magic_armor_flag().activate();
             }
             BOMB_UPGRADE_INDEX => {
-                    inventory.bomb_capacity_flag().activate();
+                inventory.bomb_capacity_flag().activate();
             }
             WALLET_INDEX => {
                 if link.wallet_upgrade == 0 {
@@ -144,8 +140,8 @@ fn handle_item_switch() {
                 } else if inventory.arrow_capacity == 60 {
                     inventory.arrow_capacity = 100;
                 }
-             }
-            _ => unreachable!()
+            }
+            _ => unreachable!(),
         };
     }
 }
@@ -181,82 +177,102 @@ pub fn render() {
         let index = index + unsafe { scroll_offset };
         let _ = write!(line.begin(), "{}", text);
         let _ = match index {
-            ORDON_SWORD_INDEX => {
-                write!(line.begin(), "Ordon Sword: {}", if inventory.ordon_sword_flag().is_active() {
+            ORDON_SWORD_INDEX => write!(
+                line.begin(),
+                "Ordon Sword: {}",
+                if inventory.ordon_sword_flag().is_active() {
                     "Ordon Sword"
                 } else {
                     ""
-                })
-            }
-            MASTER_SWORD_INDEX => {
-                write!(line.begin(), "Master Sword: {}", if inventory.light_sword_flag().is_active() {
+                }
+            ),
+            MASTER_SWORD_INDEX => write!(
+                line.begin(),
+                "Master Sword: {}",
+                if inventory.light_sword_flag().is_active() {
                     "Light Sword"
                 } else if inventory.master_sword_flag().is_active() {
                     "Master Sword"
                 } else {
                     ""
-                })
-            }
-            WOODEN_SHIELD_INDEX => {
-                write!(line.begin(), "Wooden Shield: {}", if inventory.wooden_shield_flag().is_active() {
+                }
+            ),
+            WOODEN_SHIELD_INDEX => write!(
+                line.begin(),
+                "Wooden Shield: {}",
+                if inventory.wooden_shield_flag().is_active() {
                     "Wooden Shield"
                 } else if inventory.ordon_shield_flag().is_active() {
                     "Ordon Shield"
                 } else {
                     ""
-                })
-            }
-            HYLIAN_SHIELD_INDEX => {
-                write!(line.begin(), "Hylian Shield: {}", if inventory.hylian_shield_flag().is_active() {
+                }
+            ),
+            HYLIAN_SHIELD_INDEX => write!(
+                line.begin(),
+                "Hylian Shield: {}",
+                if inventory.hylian_shield_flag().is_active() {
                     "Hylian Shield"
                 } else {
                     ""
-                })
-            }
-            HEROS_CLOTHES_INDEX => {
-                write!(line.begin(), "Hero's Clothes: {}", if inventory.heros_clothes_flag().is_active() {
+                }
+            ),
+            HEROS_CLOTHES_INDEX => write!(
+                line.begin(),
+                "Hero's Clothes: {}",
+                if inventory.heros_clothes_flag().is_active() {
                     "Hero's Clothes"
                 } else {
                     ""
-                })
-            }
-            ZORA_ARMOR_INDEX => {
-                write!(line.begin(), "Zora Armor: {}", if inventory.zora_armor_flag().is_active() {
+                }
+            ),
+            ZORA_ARMOR_INDEX => write!(
+                line.begin(),
+                "Zora Armor: {}",
+                if inventory.zora_armor_flag().is_active() {
                     "Zora Armor"
                 } else {
                     ""
-                })
-            }
-            MAGIC_ARMOR_INDEX => {
-                write!(line.begin(), "Magic Armor: {}", if inventory.magic_armor_flag().is_active() {
+                }
+            ),
+            MAGIC_ARMOR_INDEX => write!(
+                line.begin(),
+                "Magic Armor: {}",
+                if inventory.magic_armor_flag().is_active() {
                     "Magic Armor"
                 } else {
                     ""
-                })
-            }
-            BOMB_UPGRADE_INDEX => {
-                write!(line.begin(), "Bomb Capacity: {}", if inventory.bomb_capacity_flag().is_active() {
+                }
+            ),
+            BOMB_UPGRADE_INDEX => write!(
+                line.begin(),
+                "Bomb Capacity: {}",
+                if inventory.bomb_capacity_flag().is_active() {
                     "60/30/20"
                 } else {
                     "30/15/10"
-                })
-            }
-            WALLET_INDEX => {
-                write!(line.begin(), "Wallet Upgrade: {}", if link.wallet_upgrade == 0 {
+                }
+            ),
+            WALLET_INDEX => write!(
+                line.begin(),
+                "Wallet Upgrade: {}",
+                if link.wallet_upgrade == 0 {
                     "300 Rupee Wallet"
                 } else if link.wallet_upgrade == 1 {
                     "600 Rupee Wallet"
                 } else {
                     "1000 Rupee Wallet"
-                })
-            }
-            QUIVER_INDEX => {
-                write!(line.begin(), "Arrow Capacity: {} Arrows", inventory.arrow_capacity)
-            }
-            _ => unreachable!()
+                }
+            ),
+            QUIVER_INDEX => write!(
+                line.begin(),
+                "Arrow Capacity: {} Arrows",
+                inventory.arrow_capacity
+            ),
+            _ => unreachable!(),
         };
-		if unsafe { index  == cursor } {
-			line.selected = true;
-		}
+        if unsafe { index == cursor } {
+            line.selected = true;
+        }
     }
 }

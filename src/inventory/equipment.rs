@@ -1,8 +1,8 @@
 use super::super::get_state;
+use super::super::utils::{scroll_move_cursor, transition, MenuState};
 use core::fmt::Write;
 use libtp::link::inventory::Inventory;
 use libtp::link::item::*;
-use super::super::utils::{MenuState, transition, scroll_move_cursor};
 
 use super::{inv_menu_state, InventoryMenu};
 use controller;
@@ -25,9 +25,21 @@ use self::ItemType::*;
 use libtp::link::inventory::*;
 
 const ITEM_SLOTS: [(&str, ItemType, usize); 23] = [
-    ("Double Clawshots:", SingleItem(DOUBLE_CLAWSHOTS), DOUBLE_CLAWSHOT_ID_VALUE),
-    ("Dominion Rod:", SingleItem(DOMINION_ROD), DOMINION_ROD_ID_VALUE),
-    ("Ball Chain:", SingleItem(BALL_CHAIN), BALL_AND_CHAIN_ID_VALUE),
+    (
+        "Double Clawshots:",
+        SingleItem(DOUBLE_CLAWSHOTS),
+        DOUBLE_CLAWSHOT_ID_VALUE,
+    ),
+    (
+        "Dominion Rod:",
+        SingleItem(DOMINION_ROD),
+        DOMINION_ROD_ID_VALUE,
+    ),
+    (
+        "Ball Chain:",
+        SingleItem(BALL_CHAIN),
+        BALL_AND_CHAIN_ID_VALUE,
+    ),
     ("Spinner:", SingleItem(SPINNER), SPINNER_ID_VALUE),
     ("Heros Bow:", SingleItem(HEROS_BOW), HEROS_BOW_ID_VALUE),
     ("Iron Boots:", SingleItem(IRON_BOOTS), IRON_BOOTS_ID_VALUE),
@@ -190,8 +202,8 @@ pub fn render() {
         let item_id = inventory.get_by_slot_id(slot_index);
         let item_text = item_id_to_str(item_id);
         let _ = write!(line.begin(), "{} {}", text, item_text);
-		if unsafe { index  == cursor } {
-			line.selected = true;
-		}
+        if unsafe { index == cursor } {
+            line.selected = true;
+        }
     }
 }

@@ -2,6 +2,7 @@ use arrayvec::ArrayString;
 use arrayvec::ArrayVec;
 use core::fmt::Write;
 use core::fmt::{Debug, Display, Error, Formatter};
+use core::mem::size_of;
 use libtp::system::memory;
 use libtp::Addr;
 
@@ -11,7 +12,10 @@ use libtp::system::mutex::Mutex;
 use print;
 use utils::*;
 
-#[derive(Copy, Clone, PartialEq)]
+pub const MAX_WATCH: usize = 32;
+pub const WATCH_SIZE: usize = size_of::<Watch>();
+
+#[derive(Copy, Clone, Serialize, Deserialize, PartialEq)]
 #[allow(non_camel_case_types)]
 pub enum Type {
     u8,
@@ -39,7 +43,7 @@ impl Display for Type {
     }
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, Serialize, Deserialize)]
 pub struct Watch {
     addr: Addr,
     x: f32,
@@ -58,6 +62,11 @@ impl Watch {
         } else {
             self.addr
         }
+    }
+
+    fn serialize(&self) -> ArrayVec<[u8; WATCH_SIZE]> {
+        let mut array = ArrayVec::<[u8; WATCH_SIZE]>::new();
+        array
     }
 
     fn write_val(&self, f: &mut Formatter) -> Result<(), Error> {
@@ -180,7 +189,7 @@ impl Debug for Watch {
 }
 
 lazy_static! {
-    pub static ref ITEMS: Mutex<ArrayVec<[Watch; 128]>> = {
+    pub static ref ITEMS: Mutex<ArrayVec<[Watch; MAX_WATCH]>> = {
         let mut vec = ArrayVec::new();
         vec.push(Watch {
             addr: 0x803dce54,
@@ -341,7 +350,10 @@ pub fn render() {
                 }
 
                 if pressed_x {
-                    ITEMS.borrow_mut().push(Watch::default());
+                    let mut items = ITEMS.borrow_mut();
+                    if items.len() < MAX_WATCH {
+                        items.push(Watch::default());
+                    }
                 }
 
                 if pressed_y {

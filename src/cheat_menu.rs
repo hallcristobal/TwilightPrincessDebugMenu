@@ -1,4 +1,5 @@
 use core::fmt::Write;
+use core::mem::size_of;
 use libtp::link::{Inventory, Link};
 
 use utils::*;
@@ -8,16 +9,32 @@ static mut cursor: usize = 0;
 static mut scroll_offset: usize = 0;
 static mut already_pressed_a: bool = false;
 
+pub const CHEAT_SIZE: usize = size_of::<Cheat>();
+pub const CHEAT_AMNT: usize = 8;
+
 pub fn transition_into() {
     unsafe {
         already_pressed_a = false;
     }
 }
 
-struct Cheat {
+#[derive(Copy, Clone, Serialize, Deserialize)]
+enum CheatId {
+    Invincible,
+    InvincibleEnemies,
+    InfiniteAir,
+    InifinteBombs,
+    InfiniteRupees,
+    InfiniteArrows,
+    MoonJumpEnabled,
+    TeleportEnabled,
+}
+
+#[derive(Serialize, Deserialize)]
+pub struct Cheat {
     id: CheatId,
     name: &'static str,
-    active: bool,
+    pub active: bool,
     togglable: bool,
 }
 
@@ -31,20 +48,6 @@ impl Cheat {
         }
     }
 }
-
-//Infinite Health (Link):
-//Infinite Health (Enemies):
-//Infinite Air:
-//Infinite Bombs:
-//Infinite Rupees:
-//Moonjump (R+A):
-//Teleporter (R+D-Up/Down):
-//Super Spinner:
-//Fast Reset (Start):
-//"Gorge Void Practice (L+R):
-//Rupee Roll Practice (L+Z):
-//Get Boss Flag (R+Z):
-//Get Storage (D-Down):
 
 pub fn apply_cheats() {
     let link = Link::get_link();
@@ -99,7 +102,7 @@ pub fn apply_cheats() {
     }
 }
 
-static mut cheats: [Cheat; 8] = [
+static mut cheats: [Cheat; CHEAT_AMNT] = [
     Cheat::new(Invincible, "Invincible", true),
     Cheat::new(InvincibleEnemies, "Invincible Enemies", true),
     Cheat::new(InfiniteAir, "Infinite Air", true),
@@ -110,19 +113,11 @@ static mut cheats: [Cheat; 8] = [
     Cheat::new(TeleportEnabled, "Teleport Enabled", true),
 ];
 
-#[derive(Copy, Clone)]
-enum CheatId {
-    Invincible,
-    InvincibleEnemies,
-    InfiniteAir,
-    InifinteBombs,
-    InfiniteRupees,
-    InfiniteArrows,
-    MoonJumpEnabled,
-    TeleportEnabled,
-}
-
 use self::CheatId::*;
+
+pub unsafe fn get_cheats() -> &'static [Cheat] {
+    &cheats
+}
 
 pub fn render() {
     let state = unsafe { super::get_state() };

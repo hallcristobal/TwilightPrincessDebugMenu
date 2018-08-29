@@ -14,7 +14,7 @@ const MENU_ITEM_INVENTORY: usize = 0;
 const MENU_ITEM_QUEST: usize = 1;
 // const MENU_ITEM_AMOUNTS: usize = 2;
 
-const ITEMS: [&str; 2] = ["Item Wheel" , "Collection Menu",/* "Amounts"*/];
+const ITEMS: [&str; 2] = ["Item Wheel", "Collection Menu" /* "Amounts"*/];
 
 pub fn render() {
     let state = unsafe { get_state() };
@@ -37,8 +37,8 @@ pub fn render() {
                 transition(MenuState::InventoryMenu);
                 return;
             } else if cursor == MENU_ITEM_QUEST {
-                  inv_menu_state = InventoryMenu::Quest;
-                  transition(MenuState::InventoryMenu);
+                inv_menu_state = InventoryMenu::Quest;
+                transition(MenuState::InventoryMenu);
             } //else if cursor == MENU_ITEM_AMOUNTS {
               //     inv_menu_state = InventoryMenu::Amounts;
               //     transition(MenuState::InventoryMenu);

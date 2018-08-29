@@ -8,8 +8,8 @@ b draw
 
 0x80006444:
 bl game_loop
-bl 0x80018a6c ; fapGm_Execute
-bl 0x80007164 ; mDoAud_Execute
+bl fapGm_Execute()
+bl mDoAud_Execute()
 
 
 0x8034f19c:

@@ -10,9 +10,14 @@ extern crate gcn;
 extern crate libtp;
 #[macro_use]
 extern crate lazy_static;
+#[macro_use]
+extern crate serde_derive;
+extern crate serde;
+extern crate bincode;
 
 use gcn_fonts::prelude::*;
 
+pub mod card;
 pub mod cheat_menu;
 pub mod commands;
 pub mod controller;
