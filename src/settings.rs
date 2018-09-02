@@ -5,7 +5,7 @@ use core::fmt::Write;
 use gcn::card::Card;
 use utils::*;
 
-use cheat_menu::CHEAT_AMNT;
+use cheat_menu::{cheats, cheats_mut, CHEAT_AMNT};
 use memory::{Watch, MAX_WATCH};
 
 #[derive(Serialize, Deserialize)]
@@ -30,9 +30,110 @@ pub fn unpack_save(save: SaveLayout) {
     }
 }
 
+pub fn defaults() {
+    use memory::{Type, ITEMS};
+    let mut items = ITEMS.borrow_mut();
+    items.clear();
+    items.push(Watch::new(
+        0x803dce54,
+        430.0,
+        295.0,
+        Type::f32,
+        false,
+        true,
+        Some(0x5c),
+    ));
+    items.push(Watch::new(
+        0x803dce54,
+        430.0,
+        315.0,
+        Type::u16,
+        false,
+        true,
+        Some(0x16),
+    ));
+    items.push(Watch::new(
+        0x803dce54,
+        450.0,
+        340.0,
+        Type::f32,
+        false,
+        true,
+        Some(0x0),
+    ));
+    items.push(Watch::new(
+        0x803dce54,
+        450.0,
+        360.0,
+        Type::f32,
+        false,
+        true,
+        Some(0x4),
+    ));
+    items.push(Watch::new(
+        0x803dce54,
+        450.0,
+        380.0,
+        Type::f32,
+        false,
+        true,
+        Some(0x8),
+    ));
+    items.push(Watch::new(
+        0x8040afc0,
+        410.0,
+        330.0,
+        Type::String,
+        false,
+        false,
+        None,
+    ));
+    items.push(Watch::new(
+        0x8042d3e0,
+        410.0,
+        330.0,
+        Type::u8,
+        false,
+        false,
+        None,
+    ));
+    items.push(Watch::new(
+        0x803a66b3,
+        410.0,
+        330.0,
+        Type::i8,
+        false,
+        false,
+        None,
+    ));
+    items.push(Watch::new(
+        0x8040afc9,
+        410.0,
+        330.0,
+        Type::u8,
+        true,
+        false,
+        None,
+    ));
+    items.push(Watch::new(
+        0x80450c98,
+        410.0,
+        330.0,
+        Type::u8,
+        false,
+        false,
+        None,
+    ));
+    unsafe {
+        let cheats = cheats_mut();
+        cheats.iter_mut().for_each(|c| c.active = false);
+    }
+}
+
 pub fn render() {
     const CARD_SAVE: usize = 0;
     const CARD_LOAD: usize = 1;
+    const DEFAULTS: usize = 2;
 
     let state = unsafe { get_state() };
     let lines = state.menu.lines_mut();
@@ -44,7 +145,7 @@ pub fn render() {
         return;
     }
 
-    let contents = ["Save Card", "Load Card"];
+    let contents = ["Save Card", "Load Card", "Restore Defaults"];
 
     move_cursor(contents.len(), unsafe { &mut cursor });
 
@@ -53,7 +154,7 @@ pub fn render() {
             report!("Hello");
             match cursor {
                 CARD_SAVE => {
-                    let cheats = ::cheat_menu::get_cheats();
+                    let cheats = cheats();
                     let items = ::memory::ITEMS.borrow();
                     let active_c = cheats
                         .iter()
@@ -78,6 +179,9 @@ pub fn render() {
                     },
                     Err(e) => report!("Failed to open mem card: {:?}", e),
                 },
+                DEFAULTS => {
+                    defaults();
+                }
                 _ => unreachable!(),
             }
         }

@@ -65,13 +65,18 @@ pub extern "C" fn game_loop() {
                     }
                     Err(e) => report!("Failed to read mem card: {:?}", e),
                 }
-                unsafe { LOADED_SAVE = true; }
-            },
-            Err(CardError::Busy) | Err(CardError::NoCard) => {},
+                unsafe {
+                    LOADED_SAVE = true;
+                }
+            }
+            Err(CardError::Busy) | Err(CardError::NoCard) => {}
             Err(e) => {
                 report!("Failed to open mem card: {:?}", e);
-                unsafe { LOADED_SAVE = true; }
-            },
+                unsafe {
+                    LOADED_SAVE = true;
+                }
+                settings::defaults();
+            }
         }
     }
     cheat_menu::apply_cheats();

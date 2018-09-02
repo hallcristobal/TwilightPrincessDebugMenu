@@ -51,7 +51,7 @@ impl Cheat {
 pub fn apply_cheats() {
     let link = Link::get_link();
     let inventory = Inventory::get_inventory();
-    for cheat in unsafe { &cheats } {
+    for cheat in unsafe { &ITEMS } {
         if cheat.active {
             match cheat.id {
                 Invincible => {
@@ -104,7 +104,7 @@ pub fn apply_cheats() {
     }
 }
 
-static mut cheats: [Cheat; CHEAT_AMNT] = [
+static mut ITEMS: [Cheat; CHEAT_AMNT] = [
     Cheat::new(Invincible, "Invincible", true),
     // Cheat::new(InvincibleEnemies, "Invincible Enemies", true),
     Cheat::new(InfiniteAir, "Infinite Air", true),
@@ -117,13 +117,17 @@ static mut cheats: [Cheat; CHEAT_AMNT] = [
 
 use self::CheatId::*;
 
-pub unsafe fn get_cheats() -> &'static [Cheat] {
-    &cheats
+pub unsafe fn cheats() -> &'static [Cheat] {
+    &ITEMS
+}
+
+pub unsafe fn cheats_mut() -> &'static mut [Cheat] {
+    &mut ITEMS
 }
 
 pub unsafe fn load_cheats(new: ArrayVec<[bool; CHEAT_AMNT]>) {
     new.iter().enumerate().for_each(|(i, b)| {
-        cheats[i].active = *b;
+        ITEMS[i].active = *b;
     });
 }
 
@@ -140,11 +144,11 @@ pub fn render() {
         return;
     }
     unsafe {
-        scroll_move_cursor(cheats.len(), &mut cursor, &mut scroll_offset);
+        scroll_move_cursor(ITEMS.len(), &mut cursor, &mut scroll_offset);
     }
 
     let cheat_id = unsafe { cursor };
-    let cheat = unsafe { &mut cheats[cheat_id] };
+    let cheat = unsafe { &mut ITEMS[cheat_id] };
 
     unsafe {
         already_pressed_a |= pressed_a;
@@ -158,7 +162,7 @@ pub fn render() {
 
     for (index, (line, cheat)) in lines
         .into_iter()
-        .zip(unsafe { cheats.iter().skip(scroll_offset) })
+        .zip(unsafe { ITEMS.iter().skip(scroll_offset) })
         .enumerate()
         .take(state.settings.max_lines)
     {

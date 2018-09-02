@@ -56,6 +56,26 @@ pub struct Watch {
 }
 
 impl Watch {
+    pub fn new(
+        addr: Addr,
+        x: f32,
+        y: f32,
+        t: Type,
+        hex: bool,
+        visible: bool,
+        offset: Option<u16>,
+    ) -> Self {
+        Watch {
+            addr,
+            x,
+            y,
+            t,
+            offset,
+            hex,
+            visible,
+            val_addr: 0x8000000,
+        }
+    }
     fn update(&mut self) {
         self.val_addr = if let Some(offset) = self.offset {
             memory::read::<Addr>(self.addr) + offset as usize
@@ -184,110 +204,8 @@ impl Debug for Watch {
 }
 
 lazy_static! {
-    pub static ref ITEMS: Mutex<ArrayVec<[Watch; MAX_WATCH]>> = {
-        let mut vec = ArrayVec::new();
-        vec.push(Watch {
-            addr: 0x803dce54,
-            x: 429.0,
-            y: 294.0,
-            t: Type::f32,
-            hex: false,
-            visible: true,
-            val_addr: 0,
-            offset: Some(0x5c),
-        });
-        vec.push(Watch {
-            addr: 0x803dce54,
-            x: 429.0,
-            y: 314.0,
-            t: Type::u16,
-            hex: false,
-            visible: true,
-            val_addr: 0,
-            offset: Some(0x16),
-        });
-        vec.push(Watch {
-            addr: 0x803dce54,
-            x: 450.0,
-            y: 338.0,
-            t: Type::f32,
-            hex: false,
-            visible: true,
-            val_addr: 0,
-            offset: Some(0x0),
-        });
-        vec.push(Watch {
-            addr: 0x803dce54,
-            x: 450.0,
-            y: 358.0,
-            t: Type::f32,
-            hex: false,
-            visible: true,
-            val_addr: 0,
-            offset: Some(0x4),
-        });
-        vec.push(Watch {
-            addr: 0x803dce54,
-            x: 450.0,
-            y: 378.0,
-            t: Type::f32,
-            hex: false,
-            visible: true,
-            val_addr: 0,
-            offset: Some(0x8),
-        });
-        vec.push(Watch {
-            addr: 0x8040afc0,
-            x: 412.0,
-            y: 330.0,
-            t: Type::String,
-            hex: false,
-            visible: false,
-            val_addr: 0,
-            offset: None,
-        });
-        vec.push(Watch {
-            addr: 0x8042d3e0,
-            x: 412.0,
-            y: 330.0,
-            t: Type::u8,
-            hex: false,
-            visible: false,
-            val_addr: 0,
-            offset: None,
-        });
-        vec.push(Watch {
-            addr: 0x803a66b3,
-            x: 412.0,
-            y: 330.0,
-            t: Type::i8,
-            hex: false,
-            visible: false,
-            val_addr: 0,
-            offset: None,
-        });
-        vec.push(Watch {
-            addr: 0x8040afc9,
-            x: 412.0,
-            y: 330.0,
-            t: Type::u8,
-            hex: true,
-            visible: false,
-            val_addr: 0,
-            offset: None,
-        });
-        vec.push(Watch {
-            addr: 0x80450c98,
-            x: 412.0,
-            y: 330.0,
-            t: Type::u8,
-            hex: false,
-            visible: false,
-            val_addr: 0,
-            offset: None,
-        });
-        Mutex(RefCell::new(vec))
-    };
+    pub static ref ITEMS: Mutex<ArrayVec<[Watch; MAX_WATCH]>> =
+        Mutex(RefCell::new(ArrayVec::new()));
 }
 
 pub fn transition_into() {}
@@ -403,10 +321,10 @@ pub fn render() {
                 } else if pressed_u {
                     match word_cursor {
                         1 => {
-                            current_watch.x += 2.0;
+                            current_watch.x += 5.0;
                         }
                         2 => {
-                            current_watch.y += 2.0;
+                            current_watch.y += 5.0;
                         }
                         4 => {
                             current_watch.t = match current_watch.t {
@@ -425,10 +343,10 @@ pub fn render() {
                 } else if pressed_d {
                     match word_cursor {
                         1 => {
-                            current_watch.x -= 2.0;
+                            current_watch.x -= 5.0;
                         }
                         2 => {
-                            current_watch.y -= 2.0;
+                            current_watch.y -= 5.0;
                         }
                         4 => {
                             current_watch.t = match current_watch.t {
