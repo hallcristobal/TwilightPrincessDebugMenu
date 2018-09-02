@@ -1,6 +1,5 @@
 #![no_std]
 #![feature(proc_macro_non_items)]
-#![feature(use_extern_macros)]
 #![feature(const_fn)]
 #![allow(non_upper_case_globals)]
 

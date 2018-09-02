@@ -1,6 +1,5 @@
 use arrayvec::ArrayVec;
 use core::fmt::Write;
-use core::mem::size_of;
 use libtp::link::{Inventory, Link};
 
 use utils::*;
@@ -10,8 +9,7 @@ static mut cursor: usize = 0;
 static mut scroll_offset: usize = 0;
 static mut already_pressed_a: bool = false;
 
-pub const CHEAT_SIZE: usize = size_of::<Cheat>();
-pub const CHEAT_AMNT: usize = 8;
+pub const CHEAT_AMNT: usize = 7;
 
 pub fn transition_into() {
     unsafe {
@@ -60,7 +58,10 @@ pub fn apply_cheats() {
                     link.heart_quarters = (link.heart_pieces / 5) * 4;
                 }
                 InvincibleEnemies => {}
-                InfiniteAir => {}
+                InfiniteAir => {
+                    let mut air = Link::get_air();
+                    *air = 600;
+                }
                 InifinteBombs => {
                     inventory.bomb_bag_1_amnt = 99;
                     inventory.bomb_bag_2_amnt = 99;
@@ -105,7 +106,7 @@ pub fn apply_cheats() {
 
 static mut cheats: [Cheat; CHEAT_AMNT] = [
     Cheat::new(Invincible, "Invincible", true),
-    Cheat::new(InvincibleEnemies, "Invincible Enemies", true),
+    // Cheat::new(InvincibleEnemies, "Invincible Enemies", true),
     Cheat::new(InfiniteAir, "Infinite Air", true),
     Cheat::new(InifinteBombs, "Infinite Bombs", true),
     Cheat::new(InfiniteRupees, "Infinite Rupees", true),
