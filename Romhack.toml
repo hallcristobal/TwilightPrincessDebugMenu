@@ -6,7 +6,6 @@ full-developer-name = "Speedrun Community"
 
 [src]
 iso = "gz2e01.iso"
-link = ["target/powerpc-unknown-linux-gnu/release/librust.a"]
 patch = "src/patch.asm"
 map = "map/Final/Release/frameworkF.map"
 

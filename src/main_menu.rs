@@ -2,10 +2,9 @@ use core::fmt::Write;
 
 use controller;
 use utils::*;
-use {card, get_state, visible};
+use {get_state, visible};
 
 static mut cursor: usize = 0;
-static mut card: Option<card::Card> = None;
 
 pub fn transition_into() {}
 
@@ -13,9 +12,7 @@ pub fn render() {
     const MEMORY_INDEX: usize = 0;
     const INVENTORY_INDEX: usize = 1;
     const CHEAT_INDEX: usize = 2;
-    const CARD_INDEX: usize = 3;
-    const CARD_CREATE: usize = 4;
-    const CARD_SAVE: usize = 5;
+    const SETTINGS_INDEX: usize = 3;
 
     let state = unsafe { get_state() };
     let lines = state.menu.lines_mut();
@@ -29,14 +26,7 @@ pub fn render() {
         return;
     }
 
-    let contents = [
-        "Memory",
-        "Inventory",
-        "Cheat Menu",
-        "Card",
-        "Create",
-        "Save",
-    ];
+    let contents = ["Memory", "Inventory", "Cheat Menu", "Settings"];
 
     move_cursor(contents.len(), unsafe { &mut cursor });
 
@@ -54,24 +44,10 @@ pub fn render() {
                 transition(MenuState::CheatMenu);
                 return;
             }
-            CARD_INDEX => {
-                if let Ok(c) = card::Card::init() {
-                    unsafe {
-                        card = Some(c);
-                    }
-                }
+            SETTINGS_INDEX => {
+                transition(MenuState::Settings);
                 return;
             }
-            CARD_CREATE => unsafe {
-                if let Some(ref mut c) = card {
-                    let _ = c.create();
-                }
-            },
-            CARD_SAVE => unsafe {
-                if let Some(ref mut c) = card {
-                    let _ = c.write();
-                }
-            },
             _ => {}
         }
     }

@@ -64,11 +64,6 @@ impl Watch {
         }
     }
 
-    fn serialize(&self) -> ArrayVec<[u8; WATCH_SIZE]> {
-        let mut array = ArrayVec::<[u8; WATCH_SIZE]>::new();
-        array
-    }
-
     fn write_val(&self, f: &mut Formatter) -> Result<(), Error> {
         if self.val_addr < 0x80000000 || self.val_addr > 0x8FFFFFFF {
             return write!(f, "N/A");

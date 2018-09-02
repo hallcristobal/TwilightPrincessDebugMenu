@@ -1,3 +1,4 @@
+use arrayvec::ArrayVec;
 use core::fmt::Write;
 use core::mem::size_of;
 use libtp::link::{Inventory, Link};
@@ -30,7 +31,7 @@ enum CheatId {
     TeleportEnabled,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Clone)]
 pub struct Cheat {
     id: CheatId,
     name: &'static str,
@@ -117,6 +118,12 @@ use self::CheatId::*;
 
 pub unsafe fn get_cheats() -> &'static [Cheat] {
     &cheats
+}
+
+pub unsafe fn load_cheats(new: ArrayVec<[bool; CHEAT_AMNT]>) {
+    new.iter().enumerate().for_each(|(i, b)| {
+        cheats[i].active = *b;
+    });
 }
 
 pub fn render() {

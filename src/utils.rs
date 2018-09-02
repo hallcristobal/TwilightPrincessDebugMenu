@@ -78,5 +78,6 @@ define_menu!(
     (MainMenu, main_menu),
     (Memory, memory),
     (InventoryMenu, inventory),
-    (CheatMenu, cheat_menu)
+    (CheatMenu, cheat_menu),
+    (Settings, settings)
 );
