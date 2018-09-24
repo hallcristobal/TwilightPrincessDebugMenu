@@ -29,6 +29,7 @@ pub mod popups;
 pub mod print;
 pub mod settings;
 pub mod utils;
+pub mod warping;
 
 pub static mut visible: bool = false;
 
