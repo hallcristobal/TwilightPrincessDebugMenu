@@ -49,10 +49,10 @@ pub fn render() {
                 transition(MenuState::Settings);
                 return;
             }
-            // WARPING_INDEX => {
-            //     transition(MenuState::Warp);
-            //     return;
-            // }
+            WARPING_INDEX => {
+                transition(MenuState::Warp);
+                return;
+            }
             _ => {}
         }
     }

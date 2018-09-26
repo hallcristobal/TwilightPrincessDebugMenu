@@ -79,6 +79,6 @@ define_menu!(
     (Memory, memory),
     (InventoryMenu, inventory),
     (CheatMenu, cheat_menu),
-    (Settings, settings)
-    // (Warp, warping)
+    (Settings, settings),
+    (Warp, warping)
 );

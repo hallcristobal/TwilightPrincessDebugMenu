@@ -1,4 +1,4 @@
-// pub mod main;
+pub mod main;
 pub mod statics;
 use self::statics::Stage;
 use super::get_state;
@@ -11,7 +11,7 @@ pub fn transition_into() {
         // WarpMenu::RoomSelection => room_selection::transition_into(),
         // WarpMenu::StageSelection => stage_selection::transition_into(),
         // WarpMenu::BrowseTop => browse_top::transition_into(),
-        // WarpMenu::Main => main::transition_into(),
+        WarpMenu::Main => main::transition_into(),
         _ => {}
     }
 }
@@ -21,7 +21,7 @@ pub fn render() {
         // WarpMenu::RoomSelection => room_selection::render(),
         // WarpMenu::StageSelection => stage_selection::render(),
         // WarpMenu::BrowseTop => browse_top::render(),
-        // WarpMenu::Main => main::render(),
+        WarpMenu::Main => main::render(),
         _ => {}
     }
 }
@@ -52,12 +52,12 @@ impl<'a> StageType {
         }
     }
 
-    // pub fn areas(&self) -> &[(&Stage, &str)] {
-    //     match *self {
-    //         StageType::Cave => &statics::cave::STAGES,
-    //         StageType::Dungeon => &statics::dungeon::STAGES,
-    //         StageType::Interior => &statics::interior::STAGES,
-    //         StageType::Overworld => &statics::overworld::STAGES,
-    //     }
-    // }
+    pub fn areas(&self) -> &[(&Stage, &str)] {
+        match *self {
+            StageType::Cave => &statics::cave::STAGES,
+            StageType::Dungeon => &statics::dungeon::STAGES,
+            StageType::Interior => &statics::interior::STAGES,
+            StageType::Overworld => &statics::overworld::STAGES,
+        }
+    }
 }

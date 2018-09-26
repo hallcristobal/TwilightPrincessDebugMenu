@@ -1,4 +1,4 @@
-#![allow(dead_code)]
+    #![allow(dead_code)]
 use super::*;
 
 #[derive(PartialEq, Clone)]
@@ -88,7 +88,6 @@ impl Stage for OverworldStage {
         }
     }
 }
-
 pub static STAGES: [(&Stage, &str); 24] = [
     (&OverworldStage::OrdonRanch, "Ordon Ranch"),
     (&OverworldStage::TitleScreen, "Title Screen"),

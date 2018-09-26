@@ -1,7 +1,7 @@
 pub mod cave;
-// pub mod dungeon;
-// pub mod interior;
-// pub mod overworld;
+pub mod dungeon;
+pub mod interior;
+pub mod overworld;
 
 pub trait Stage: Sync {
     fn get_id(&self) -> &'static str;
