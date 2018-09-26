@@ -14,6 +14,5 @@ bl game_loop
 bl fapGm_Execute()
 bl mDoAud_Execute()
 
-
 0x8034f19c:
 b read_controller

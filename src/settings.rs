@@ -1,8 +1,8 @@
-use super::get_state;
 use arrayvec::ArrayVec;
 use controller;
 use core::fmt::Write;
 use gcn::card::Card;
+use get_state;
 use utils::*;
 
 use cheat_menu::{cheats, cheats_mut, CHEAT_AMNT};

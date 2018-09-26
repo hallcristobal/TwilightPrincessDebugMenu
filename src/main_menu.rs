@@ -13,6 +13,7 @@ pub fn render() {
     const INVENTORY_INDEX: usize = 1;
     const CHEAT_INDEX: usize = 2;
     const SETTINGS_INDEX: usize = 3;
+    const WARPING_INDEX: usize = 4;
 
     let state = unsafe { get_state() };
     let lines = state.menu.lines_mut();
@@ -26,7 +27,7 @@ pub fn render() {
         return;
     }
 
-    let contents = ["Memory", "Inventory", "Cheat Menu", "Settings"];
+    let contents = ["Memory", "Inventory", "Cheat Menu", "Settings", "Warping"];
 
     move_cursor(contents.len(), unsafe { &mut cursor });
 
@@ -48,6 +49,10 @@ pub fn render() {
                 transition(MenuState::Settings);
                 return;
             }
+            // WARPING_INDEX => {
+            //     transition(MenuState::Warp);
+            //     return;
+            // }
             _ => {}
         }
     }
