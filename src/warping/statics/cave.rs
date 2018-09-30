@@ -1,6 +1,4 @@
-#![allow(dead_code)]
 use super::*;
-
 #[derive(PartialEq, Clone)]
 pub enum CaveStage {
     LanayruIcePuzzleCave,
@@ -48,20 +46,43 @@ impl Stage for CaveStage {
             CaveStage::FaronWoodsCave => &FARON_WOODS_CAVE,
         }
     }
+
+    fn len(&self) -> usize {
+        11
+    }
 }
 
-pub static STAGES: [(&Stage, &str); 11] = [
-    (&CaveStage::LanayruIcePuzzleCave, "Lanayru Ice Puzzle Cave"),
-    (&CaveStage::CaveOfOrdeals, "Cave of Ordeals"),
-    (&CaveStage::EldinLongCave, "Eldin Long Cave"),
-    (&CaveStage::LakeHyliaLongCave, "Lake Hylia Long Cave"),
-    (&CaveStage::EldinGoronStockcave, "Eldin Goron Stockcave"),
-    (&CaveStage::Grotto1, "Grotto 1"),
-    (&CaveStage::Grotto2, "Grotto 2"),
-    (&CaveStage::Grotto3, "Grotto 3"),
-    (&CaveStage::Grotto4, "Grotto 4"),
-    (&CaveStage::Grotto5, "Grotto 5"),
-    (&CaveStage::FaronWoodsCave, "Faron Woods Cave"),
+impl From<usize> for CaveStage {
+    fn from(i: usize) -> Self {
+        match i {
+            0 => CaveStage::LanayruIcePuzzleCave,
+            1 => CaveStage::CaveOfOrdeals,
+            2 => CaveStage::EldinLongCave,
+            3 => CaveStage::LakeHyliaLongCave,
+            4 => CaveStage::EldinGoronStockcave,
+            5 => CaveStage::Grotto1,
+            6 => CaveStage::Grotto2,
+            7 => CaveStage::Grotto3,
+            8 => CaveStage::Grotto4,
+            9 => CaveStage::Grotto5,
+            10 => CaveStage::FaronWoodsCave,
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub static STAGES: [&str; 11] = [
+    "Lanayru Ice Puzzle Cave",
+    "Cave of Ordeals",
+    "Eldin Long Cave",
+    "Lake Hylia Long Cave",
+    "Eldin Goron Stockcave",
+    "Grotto 1",
+    "Grotto 2",
+    "Grotto 3",
+    "Grotto 4",
+    "Grotto 5",
+    "Faron Woods Cave",
 ];
 
 pub static LANAYRU_ICE_PUZZLE_CAVE: [Room; 1] = [Room::new("Lanayru Ice Puzzle Cave", 0, &[0])];

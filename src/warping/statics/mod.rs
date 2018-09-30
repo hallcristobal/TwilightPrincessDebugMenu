@@ -6,6 +6,7 @@ pub mod overworld;
 pub trait Stage: Sync {
     fn get_id(&self) -> &'static str;
     fn get_rooms(&self) -> &'static [Room<'static>];
+    fn len(&self) -> usize;
 }
 
 pub struct Room<'a> {

@@ -54,25 +54,46 @@ impl Stage for InteriorStage {
             InteriorStage::HyruleCastleCutscenes => &HYRULE_CASTLE_CUTSCENES,
         }
     }
+    fn len(&self) -> usize {
+        13
+    }
 }
 
-pub static STAGES: [(&Stage, &str); 13] = [
-    (&InteriorStage::OrdonVillage, "Ordon Village"),
-    (&InteriorStage::HyruleCastleSewers, "Hyrule Castle Sewers"),
-    (&InteriorStage::FaronWoods, "Faron Woods"),
-    (&InteriorStage::KakarikoVillage, "Kakariko Village"),
-    (&InteriorStage::DeathMountain, "Death Mountain"),
-    (&InteriorStage::TelmasBar, "Telmas Bar"),
-    (&InteriorStage::FishingPond, "Fishing Pond"),
-    (&InteriorStage::HiddenVillage, "Hidden Village"),
-    (&InteriorStage::CastleTown, "Castle Town"),
-    (&InteriorStage::StarGame, "Star Game"),
-    (&InteriorStage::KakarikoGraveyard, "Kakariko Graveyard"),
-    (&InteriorStage::LightArrowsCutscene, "Light Arrows Cutscene"),
-    (
-        &InteriorStage::HyruleCastleCutscenes,
-        "Hyrule Castle Cutscenes",
-    ),
+impl From<usize> for InteriorStage {
+    fn from(i: usize) -> Self {
+        match i {
+            0 => InteriorStage::OrdonVillage,
+            1 => InteriorStage::HyruleCastleSewers,
+            2 => InteriorStage::FaronWoods,
+            3 => InteriorStage::KakarikoVillage,
+            4 => InteriorStage::DeathMountain,
+            5 => InteriorStage::TelmasBar,
+            6 => InteriorStage::FishingPond,
+            7 => InteriorStage::HiddenVillage,
+            8 => InteriorStage::CastleTown,
+            9 => InteriorStage::StarGame,
+            10 => InteriorStage::KakarikoGraveyard,
+            11 => InteriorStage::LightArrowsCutscene,
+            12 => InteriorStage::HyruleCastleCutscenes,
+            _ => unreachable!(),
+        }
+    }
+}
+
+pub static STAGES: [&str; 13] = [
+    "Ordon Village",
+    "Hyrule Castle Sewers",
+    "Faron Woods",
+    "Kakariko Village",
+    "Death Mountain",
+    "Telmas Bar",
+    "Fishing Pond",
+    "Hidden Village",
+    "Castle Town",
+    "Star Game",
+    "Kakariko Graveyard",
+    "Light Arrows Cutscene",
+    "Hyrule Castle Cutscenes",
 ];
 
 pub static ORDON_VILLAGE: [Room; 6] = [

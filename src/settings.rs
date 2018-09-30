@@ -172,9 +172,7 @@ pub fn render() {
                 }
                 CARD_LOAD => match Card::open("tpgz01") {
                     Ok(mut card) => match card.deserialize_read(unpack_save) {
-                        Ok(_) => {
-                            report!("Read mem card");
-                        }
+                        Ok(_) => report!("Read mem card"),
                         Err(e) => report!("Failed to read mem card: {:?}", e),
                     },
                     Err(e) => report!("Failed to open mem card: {:?}", e),
@@ -182,7 +180,9 @@ pub fn render() {
                 DEFAULTS => {
                     defaults();
                 }
-                _ => unreachable!(),
+                _ => {
+                    unreachable!();
+                }
             }
         }
     }

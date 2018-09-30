@@ -87,32 +87,68 @@ impl Stage for OverworldStage {
             OverworldStage::HiddenSkill => &HIDDEN_SKILL,
         }
     }
+
+    fn len(&self) -> usize {
+        24
+    }
 }
-pub static STAGES: [(&Stage, &str); 24] = [
-    (&OverworldStage::OrdonRanch, "Ordon Ranch"),
-    (&OverworldStage::TitleScreen, "Title Screen"),
-    (&OverworldStage::OrdonVillage, "Ordon Village"),
-    (&OverworldStage::OrdonSpring, "Ordon Spring"),
-    (&OverworldStage::FaronWoods, "Faron Woods"),
-    (&OverworldStage::KakarikoVillage, "Kakariko Village"),
-    (&OverworldStage::DeathMountain, "Death Mountain"),
-    (&OverworldStage::KakarikoGraveyard, "Kakariko Graveyard"),
-    (&OverworldStage::ZorasRiver, "Zoras River"),
-    (&OverworldStage::ZorasDomain, "Zoras Domain"),
-    (&OverworldStage::Snowpeak, "Snowpeak"),
-    (&OverworldStage::LakeHylia, "Lake Hylia"),
-    (&OverworldStage::CastleTown, "Castle Town"),
-    (&OverworldStage::SacredGrove, "Sacred Grove"),
-    (&OverworldStage::BublinCamp, "Bublin Camp"),
-    (&OverworldStage::HyruleField, "Hyrule Field"),
-    (&OverworldStage::OutsideCastleTown, "Outside Castle Town"),
-    (&OverworldStage::Bublin2, "Bublin 2"),
-    (&OverworldStage::GerudoDesert, "Gerudo Desert"),
-    (&OverworldStage::MirrorChamber, "Mirror Chamber"),
-    (&OverworldStage::UpperZorasRiver, "Upper Zoras River"),
-    (&OverworldStage::FishingPond, "Fishing Pond"),
-    (&OverworldStage::HiddenVillage, "Hidden Village"),
-    (&OverworldStage::HiddenSkill, "Hidden Skill"),
+
+impl From<usize> for OverworldStage {
+    fn from(i: usize) -> Self {
+        match i {
+            0 => OverworldStage::OrdonRanch,
+            1 => OverworldStage::TitleScreen,
+            2 => OverworldStage::OrdonVillage,
+            3 => OverworldStage::OrdonSpring,
+            4 => OverworldStage::FaronWoods,
+            5 => OverworldStage::KakarikoVillage,
+            6 => OverworldStage::DeathMountain,
+            7 => OverworldStage::KakarikoGraveyard,
+            8 => OverworldStage::ZorasRiver,
+            9 => OverworldStage::ZorasDomain,
+            10 => OverworldStage::Snowpeak,
+            11 => OverworldStage::LakeHylia,
+            12 => OverworldStage::CastleTown,
+            13 => OverworldStage::SacredGrove,
+            14 => OverworldStage::BublinCamp,
+            15 => OverworldStage::HyruleField,
+            16 => OverworldStage::OutsideCastleTown,
+            17 => OverworldStage::Bublin2,
+            18 => OverworldStage::GerudoDesert,
+            19 => OverworldStage::MirrorChamber,
+            20 => OverworldStage::UpperZorasRiver,
+            21 => OverworldStage::FishingPond,
+            22 => OverworldStage::HiddenVillage,
+            23 => OverworldStage::HiddenSkill,
+            _ => unreachable!(),
+        }
+    }
+}
+pub static STAGES: [&str; 24] = [
+    "Ordon Ranch",
+    "Title Screen",
+    "Ordon Village",
+    "Ordon Spring",
+    "Faron Woods",
+    "Kakariko Village",
+    "Death Mountain",
+    "Kakariko Graveyard",
+    "Zoras River",
+    "Zoras Domain",
+    "Snowpeak",
+    "Lake Hylia",
+    "Castle Town",
+    "Sacred Grove",
+    "Bublin Camp",
+    "Hyrule Field",
+    "Outside Castle Town",
+    "Bublin 2",
+    "Gerudo Desert",
+    "Mirror Chamber",
+    "Upper Zoras River",
+    "Fishing Pond",
+    "Hidden Village",
+    "Hidden Skill",
 ];
 
 pub static ORDON_RANCH: [Room; 1] = [Room::new(

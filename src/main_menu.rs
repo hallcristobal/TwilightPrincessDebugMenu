@@ -1,8 +1,7 @@
 use core::fmt::Write;
 
-use controller;
 use utils::*;
-use {get_state, visible};
+use {controller, get_state, visible, warping};
 
 static mut cursor: usize = 0;
 
@@ -14,6 +13,7 @@ pub fn render() {
     const CHEAT_INDEX: usize = 2;
     const SETTINGS_INDEX: usize = 3;
     const WARPING_INDEX: usize = 4;
+    const QUICK_WARP_INDEX: usize = 6;
 
     let state = unsafe { get_state() };
     let lines = state.menu.lines_mut();
@@ -27,7 +27,15 @@ pub fn render() {
         return;
     }
 
-    let contents = ["Memory", "Inventory", "Cheat Menu", "Settings", "Warping"];
+    let contents = [
+        "Memory",
+        "Inventory",
+        "Cheat Menu",
+        "Settings",
+        "Warping",
+        "",
+        "Quick Warp",
+    ];
 
     move_cursor(contents.len(), unsafe { &mut cursor });
 
@@ -51,6 +59,10 @@ pub fn render() {
             }
             WARPING_INDEX => {
                 transition(MenuState::Warp);
+                return;
+            }
+            QUICK_WARP_INDEX => {
+                warping::load_saved_warp();
                 return;
             }
             _ => {}

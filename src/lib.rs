@@ -2,6 +2,7 @@
 #![feature(proc_macro_non_items)]
 #![feature(const_fn)]
 #![allow(non_upper_case_globals)]
+#![feature(trace_macros)]
 
 extern crate arrayvec;
 extern crate gcn_fonts;
@@ -64,7 +65,9 @@ pub extern "C" fn game_loop() {
                     Ok(_) => {
                         report!("Read mem card");
                     }
-                    Err(e) => report!("Failed to read mem card: {:?}", e),
+                    Err(e) => {
+                        report!("Failed to read mem card: {:?}", e);
+                    }
                 }
                 unsafe {
                     LOADED_SAVE = true;

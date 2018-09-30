@@ -1,5 +1,5 @@
 use libtp::game::controller;
-use libtp::system::{get_link_momentum, memory, ZEL_AUDIO};
+use libtp::system::{get_link_momentum, memory, GAME_INFO, ZEL_AUDIO};
 use libtp::{addrs, Addr};
 
 pub static mut doing_cheats: bool = false;
@@ -13,8 +13,9 @@ pub struct Command {
 pub const STORE_POSITION: usize = 0;
 pub const LOAD_POSITION: usize = 1;
 pub const MOON_JUMP: usize = 2;
+pub const RELOAD_AREA: usize = 3;
 
-pub static mut COMMANDS: [Command; 3] = [
+pub static mut COMMANDS: [Command; 4] = [
     Command {
         active: true,
         buttons: 0x0028,
@@ -29,6 +30,11 @@ pub static mut COMMANDS: [Command; 3] = [
         active: true,
         buttons: 0x0120,
         command: moon_jump,
+    },
+    Command {
+        active: true,
+        buttons: 0x1160,
+        command: reload_area,
     },
 ];
 
@@ -95,6 +101,12 @@ fn load_position() {
 fn moon_jump() {
     if let Some(ref mut momentum) = get_link_momentum() {
         (*momentum).link_momentum.y = 56.0;
+    }
+}
+
+fn reload_area() {
+    unsafe {
+        GAME_INFO.warp.enabled = true;
     }
 }
 

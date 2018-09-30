@@ -1,10 +1,11 @@
 pub mod main;
 pub mod statics;
-use self::statics::Stage;
 use super::get_state;
+use libtp::warping::Entrance;
 
 pub static mut warp_menu_state: WarpMenu = WarpMenu::Main;
 pub static mut stage_type: StageType = StageType::Cave;
+pub static mut saved_warp: Option<Entrance> = None;
 
 pub fn transition_into() {
     match unsafe { warp_menu_state } {
@@ -26,6 +27,13 @@ pub fn render() {
     }
 }
 
+pub fn load_saved_warp() {
+    unsafe {
+        stage_type = StageType::SavedEntrance;
+    }
+    main::do_warp();
+}
+
 #[derive(Copy, Clone)]
 pub enum WarpMenu {
     RoomSelection,
@@ -34,12 +42,14 @@ pub enum WarpMenu {
     Main,
 }
 
-#[derive(Copy, Clone)]
+#[derive(Copy, Clone, PartialEq)]
 pub enum StageType {
     Cave,
     Dungeon,
     Interior,
     Overworld,
+    LastEntrance,
+    SavedEntrance,
 }
 
 impl<'a> StageType {
@@ -49,15 +59,8 @@ impl<'a> StageType {
             StageType::Dungeon => "Dungeon",
             StageType::Interior => "Interior",
             StageType::Overworld => "Overworld",
-        }
-    }
-
-    pub fn areas(&self) -> &[(&Stage, &str)] {
-        match *self {
-            StageType::Cave => &statics::cave::STAGES,
-            StageType::Dungeon => &statics::dungeon::STAGES,
-            StageType::Interior => &statics::interior::STAGES,
-            StageType::Overworld => &statics::overworld::STAGES,
+            StageType::LastEntrance => "Last Entrance",
+            StageType::SavedEntrance => "Saved Entrance",
         }
     }
 }

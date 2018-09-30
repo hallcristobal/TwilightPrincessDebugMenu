@@ -9,7 +9,7 @@ static mut cursor: usize = 0;
 static mut scroll_offset: usize = 0;
 static mut already_pressed_a: bool = false;
 
-pub const CHEAT_AMNT: usize = 7;
+pub const CHEAT_AMNT: usize = 8;
 
 pub fn transition_into() {
     unsafe {
@@ -27,6 +27,7 @@ enum CheatId {
     InfiniteArrows,
     MoonJumpEnabled,
     TeleportEnabled,
+    ReloadArea,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -84,6 +85,9 @@ pub fn apply_cheats() {
                         commands::COMMANDS[commands::STORE_POSITION].active = true;
                     }
                 }
+                ReloadArea => unsafe {
+                    commands::COMMANDS[commands::RELOAD_AREA].active = true;
+                },
             }
         } else {
             match cheat.id {
@@ -98,6 +102,9 @@ pub fn apply_cheats() {
                         commands::COMMANDS[commands::STORE_POSITION].active = false;
                     }
                 }
+                ReloadArea => unsafe {
+                    commands::COMMANDS[commands::RELOAD_AREA].active = false;
+                },
                 _ => {}
             }
         }
@@ -113,6 +120,7 @@ static mut ITEMS: [Cheat; CHEAT_AMNT] = [
     Cheat::new(InfiniteArrows, "Infinite Arrows", true),
     Cheat::new(MoonJumpEnabled, "Moon Jump Enabled", true),
     Cheat::new(TeleportEnabled, "Teleport Enabled", true),
+    Cheat::new(ReloadArea, "Reload Area (L+R+A+Start)", true),
 ];
 
 use self::CheatId::*;
