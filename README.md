@@ -33,15 +33,15 @@ rustup target add powerpc-unknown-linux-gnu
 
 And then do a install the Romhack Compiler with
 ```
-cargo install --git https://github.com/CryZe/romhack-compiler
+cargo install romhack --git https://github.com/CryZe/romhack-compiler
 ```
 
-Run the romhack compiler to build a new iso 
+Run the romhack compiler to build a new iso
 ```
 romhack build
 ```
 
-The new iso will, by default, be put in the `target` folder. You can change this 
+The new iso will, by default, be put in the `target` folder. You can change this
 in the Romhack.toml file if you'd like by editing the lines
 ```Toml
 ...
