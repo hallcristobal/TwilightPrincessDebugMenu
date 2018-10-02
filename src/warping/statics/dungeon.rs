@@ -1,6 +1,4 @@
-#![allow(dead_code)]
 use super::*;
-
 #[derive(PartialEq, Clone)]
 pub enum DungeonStage {
     LakebedTemple,
@@ -35,8 +33,8 @@ pub enum DungeonStage {
     Darkhammer,
 }
 
-impl Stage for DungeonStage {
-    fn get_id(&self) -> &'static str {
+impl DungeonStage {
+    pub fn get_id(&self) -> &'static str {
         match *self {
             DungeonStage::LakebedTemple => "D_MN01",
             DungeonStage::Morpheel => "D_MN01A",
@@ -71,7 +69,7 @@ impl Stage for DungeonStage {
         }
     }
 
-    fn get_rooms(&self) -> &'static [Room<'static>] {
+    pub fn get_rooms(&self) -> &'static [Room<'static>] {
         match *self {
             DungeonStage::LakebedTemple => &LAKEBED_TEMPLE,
             DungeonStage::Morpheel => &MORPHEEL,
@@ -105,7 +103,8 @@ impl Stage for DungeonStage {
             DungeonStage::Darkhammer => &DARKHAMMER,
         }
     }
-    fn len(&self) -> usize {
+
+    pub fn len(&self) -> usize {
         30
     }
 }

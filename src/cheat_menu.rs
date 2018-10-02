@@ -120,7 +120,7 @@ static mut ITEMS: [Cheat; CHEAT_AMNT] = [
     Cheat::new(InfiniteArrows, "Infinite Arrows", true),
     Cheat::new(MoonJumpEnabled, "Moon Jump Enabled", true),
     Cheat::new(TeleportEnabled, "Teleport Enabled", true),
-    Cheat::new(ReloadArea, "Reload Area (L+R+A+Start)", true),
+    Cheat::new(ReloadArea, "Reload Area", true),
 ];
 
 use self::CheatId::*;
@@ -134,9 +134,17 @@ pub unsafe fn cheats_mut() -> &'static mut [Cheat] {
 }
 
 pub unsafe fn load_cheats(new: ArrayVec<[bool; CHEAT_AMNT]>) {
-    new.iter().enumerate().for_each(|(i, b)| {
+    let max = if CHEAT_AMNT < new.len() {
+        CHEAT_AMNT
+    } else {
+        new.len()
+    };
+    for (i, b) in new.iter().enumerate() {
+        if i >= max {
+            break;
+        }
         ITEMS[i].active = *b;
-    });
+    }
 }
 
 pub fn render() {

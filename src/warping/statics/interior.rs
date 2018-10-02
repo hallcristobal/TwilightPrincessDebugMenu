@@ -1,6 +1,4 @@
-#![allow(dead_code)]
 use super::*;
-
 #[derive(PartialEq, Clone)]
 pub enum InteriorStage {
     OrdonVillage,
@@ -18,8 +16,8 @@ pub enum InteriorStage {
     HyruleCastleCutscenes,
 }
 
-impl Stage for InteriorStage {
-    fn get_id(&self) -> &'static str {
+impl InteriorStage {
+    pub fn get_id(&self) -> &'static str {
         match *self {
             InteriorStage::OrdonVillage => "R_SP01",
             InteriorStage::HyruleCastleSewers => "R_SP107",
@@ -37,7 +35,7 @@ impl Stage for InteriorStage {
         }
     }
 
-    fn get_rooms(&self) -> &'static [Room<'static>] {
+    pub fn get_rooms(&self) -> &'static [Room<'static>] {
         match *self {
             InteriorStage::OrdonVillage => &ORDON_VILLAGE,
             InteriorStage::HyruleCastleSewers => &HYRULE_CASTLE_SEWERS,
@@ -54,7 +52,8 @@ impl Stage for InteriorStage {
             InteriorStage::HyruleCastleCutscenes => &HYRULE_CASTLE_CUTSCENES,
         }
     }
-    fn len(&self) -> usize {
+
+    pub fn len(&self) -> usize {
         13
     }
 }

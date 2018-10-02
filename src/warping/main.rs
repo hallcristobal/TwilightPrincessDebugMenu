@@ -3,7 +3,6 @@ use core::str;
 use libtp::warping::{Entrance, Warp};
 use visible;
 
-use super::statics::Stage;
 use super::*;
 use controller;
 use utils::*;

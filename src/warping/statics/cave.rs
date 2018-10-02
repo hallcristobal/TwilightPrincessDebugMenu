@@ -14,8 +14,8 @@ pub enum CaveStage {
     FaronWoodsCave,
 }
 
-impl Stage for CaveStage {
-    fn get_id(&self) -> &'static str {
+impl CaveStage {
+    pub fn get_id(&self) -> &'static str {
         match *self {
             CaveStage::LanayruIcePuzzleCave => "D_SB00",
             CaveStage::CaveOfOrdeals => "D_SB01",
@@ -31,7 +31,7 @@ impl Stage for CaveStage {
         }
     }
 
-    fn get_rooms(&self) -> &'static [Room<'static>] {
+    pub fn get_rooms(&self) -> &'static [Room<'static>] {
         match *self {
             CaveStage::LanayruIcePuzzleCave => &LANAYRU_ICE_PUZZLE_CAVE,
             CaveStage::CaveOfOrdeals => &CAVE_OF_ORDEALS,
@@ -47,7 +47,7 @@ impl Stage for CaveStage {
         }
     }
 
-    fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         11
     }
 }

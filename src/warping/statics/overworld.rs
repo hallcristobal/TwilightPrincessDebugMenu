@@ -1,6 +1,4 @@
-    #![allow(dead_code)]
 use super::*;
-
 #[derive(PartialEq, Clone)]
 pub enum OverworldStage {
     OrdonRanch,
@@ -29,8 +27,8 @@ pub enum OverworldStage {
     HiddenSkill,
 }
 
-impl Stage for OverworldStage {
-    fn get_id(&self) -> &'static str {
+impl OverworldStage {
+    pub fn get_id(&self) -> &'static str {
         match *self {
             OverworldStage::OrdonRanch => "F_SP00",
             OverworldStage::TitleScreen => "F_SP102",
@@ -59,7 +57,7 @@ impl Stage for OverworldStage {
         }
     }
 
-    fn get_rooms(&self) -> &'static [Room<'static>] {
+    pub fn get_rooms(&self) -> &'static [Room<'static>] {
         match *self {
             OverworldStage::OrdonRanch => &ORDON_RANCH,
             OverworldStage::TitleScreen => &TITLE_SCREEN,
@@ -88,7 +86,7 @@ impl Stage for OverworldStage {
         }
     }
 
-    fn len(&self) -> usize {
+    pub fn len(&self) -> usize {
         24
     }
 }
@@ -124,6 +122,7 @@ impl From<usize> for OverworldStage {
         }
     }
 }
+
 pub static STAGES: [&str; 24] = [
     "Ordon Ranch",
     "Title Screen",
@@ -282,8 +281,7 @@ pub static SACRED_GROVE: [Room; 3] = [
     Room::new("Temple of Time", 2, &[0, 1, 101, 3, 102, 52]),
     Room::new("Lost Woods", 3, &[0, 1, 2, 3, 4, 5, 6]),
 ];
-pub static BUBLIN_CAMP: [Room; 4] = [
-    Room::new("Camp Geometry (dont use!)", 0, &[]),
+pub static BUBLIN_CAMP: [Room; 3] = [
     Room::new("Main Camp", 1, &[0, 1, 2, 6]),
     Room::new("Beta Camp", 2, &[0]),
     Room::new("Before Arbiters Grounds", 3, &[0, 2, 3, 4, 5, 7]),

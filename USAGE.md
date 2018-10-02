@@ -6,29 +6,53 @@ That being said, if you do encounter any type of unexpected crash, please report
 ## Building
 
 1) Open the romhack-patcher
-2) Click "Open Patch" > Select the tpgz_0.0.1.patch file
-3) Click "Open ISO" > Select your Twilight Princess NTSC-U (USA) ISO
+2) Click "Open Patch" > Select the tpgz-warping.patch file
+3) Click "Open ISO" > Select your Twilight Princess NTSC-U (USA) ISO (PAL
+   support to be added in future releases)
 4) Click Apply and then select a location for the new ISO, type in a name similar to "tpgz.iso"
 #### !!!!!!!!!!!!!! Note: The window may freeze while the patcher is working. This is normal. !!!!!!!!!!!!!!
 5) When it is done patching open in Dolphin or on console via Nintendont
 
 ENJOY!
 
-## Usage
-### Controls:
+# Usage
+
+## Cheats:
+| Button Combo | Result |
+|-|-|
+|L + R + A + Start| Reload Area |
+|R + D-Up | Store Position |
+|R + D-Down | Reload Position |
+
+## Main Menu:
+#### Controls:
 - L + R + D-down to open menu
 - A to enter a menu
 - B to leave a menu
 
-### Cheats Menu:
-- A to Activate / Deactivate
+### QuickOptions
+- Quick Warp - Reloads a saved entrance point
+- Boss Flags - Shows current Boss Flags Value
+- Set/Clear Boss Flags - Sets or Clears Boss Flags
 
-### Inventory:
+## Inventory
 - D-Left/D-right to scroll/change
 - X to remove selected entry
 - Y to add an entry
 
+## Cheats
+- A to Activate / Deactivate
+
+## Warping
+![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Warning! Modifying the
+State value from `0xFF` runs the possibility of crashing the game if not a valid
+state. ![#f03c15](https://placehold.it/15/f03c15/000000?text=+)
+- D-Left/D-Right scroll through options
+- Execute - Warp to selected Entrance
+- Save Last Entrance - Save Last Entrance for Quick Warp
+
 ## Memory
+- Max of 32
 - D-Up/D-Down to select watch entry
 - A to enter Watch Entry
 - D-Left/D-right to select option
@@ -44,8 +68,12 @@ ENJOY!
 - D-Left/D-right to select "digit"
 - D-Up/D-Down to change (all in hex)
 
-## Additions
+## Settings
+- Save Card - Save current menu settings to MemCard
+- Load Card - Loads saved menu settings
+- Restore Defaults - Restores Default menu settings
 
+## Additions
 I've provided some default memory values for the sake of convenience, they are as follows in the list:
 - Link's Speed
 - Link's Angle
@@ -56,6 +84,7 @@ I've provided some default memory values for the sake of convenience, they are a
 - Current Room
 - Current Spawn Point
 - Boss Flags
+- Time of Day
 
 ## Helping Out
 

@@ -124,6 +124,15 @@ pub fn defaults() {
         false,
         None,
     ));
+    items.push(Watch::new(
+        0x8000_0000,
+        410.0,
+        330.0,
+        Type::ToD,
+        false,
+        false,
+        None,
+    ));
     unsafe {
         let cheats = cheats_mut();
         cheats.iter_mut().for_each(|c| c.active = false);

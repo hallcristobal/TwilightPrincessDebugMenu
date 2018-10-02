@@ -26,6 +26,7 @@ pub enum Type {
     i32,
     f32,
     String,
+    ToD,
 }
 
 impl Display for Type {
@@ -39,6 +40,7 @@ impl Display for Type {
             Type::i32 => write!(f, "i32"),
             Type::f32 => write!(f, "f32"),
             Type::String => write!(f, "String"),
+            Type::ToD => write!(f, "ToD"),
         }
     }
 }
@@ -155,6 +157,16 @@ impl Watch {
                 let value = memory::read_str(memory::ptr(self.val_addr));
                 write!(f, "{}", value)
             }
+            Type::ToD => {
+                use libtp::system::ZEL_AUDIO;
+                unsafe {
+                    write!(
+                        f,
+                        "{:02}:{:02}",
+                        ZEL_AUDIO.time_hours, ZEL_AUDIO.time_minutes
+                    )
+                }
+            }
         }
     }
 }
@@ -232,6 +244,7 @@ enum SelectedPhase {
 
 static mut PHASE: SelectedPhase = SelectedPhase::Base;
 static mut cursor: usize = 0;
+static mut scroll_offset: usize = 0;
 static mut word_cursor: usize = 0;
 static mut char_cursor: usize = 2;
 
@@ -266,6 +279,11 @@ pub fn render() {
                     let mut items = ITEMS.borrow_mut();
                     if items.len() < MAX_WATCH {
                         items.push(Watch::default());
+                        if cursor > state.settings.max_lines {
+                            if scroll_offset < state.settings.max_lines {
+                                scroll_offset += 1;
+                            }
+                        }
                     }
                 }
 
@@ -274,6 +292,12 @@ pub fn render() {
                     if items.len() > 0 {
                         if cursor < items.len() {
                             items.remove(cursor);
+
+                            if cursor > state.settings.max_lines {
+                                if scroll_offset > 1 {
+                                    scroll_offset -= 1;
+                                }
+                            }
                         }
                     }
                 }
@@ -282,11 +306,7 @@ pub fn render() {
                     cursor = ITEMS.borrow().len() - 1;
                 }
 
-                if pressed_u && cursor > 0 {
-                    cursor -= 1;
-                } else if pressed_d && cursor + 1 < ITEMS.borrow().len() {
-                    cursor += 1;
-                }
+                scroll_move_cursor(ITEMS.borrow().len(), &mut cursor, &mut scroll_offset);
             }
             SelectedPhase::Word => {
                 let mut current_watch: Watch = ITEMS.borrow_mut().remove(cursor);
@@ -335,7 +355,8 @@ pub fn render() {
                                 Type::u32 => Type::i32,
                                 Type::i32 => Type::f32,
                                 Type::f32 => Type::String,
-                                Type::String => Type::u8,
+                                Type::String => Type::ToD,
+                                Type::ToD => Type::u8,
                             }
                         }
                         _ => {}
@@ -350,7 +371,7 @@ pub fn render() {
                         }
                         4 => {
                             current_watch.t = match current_watch.t {
-                                Type::u8 => Type::String,
+                                Type::u8 => Type::ToD,
                                 Type::i8 => Type::u8,
                                 Type::u16 => Type::i8,
                                 Type::i16 => Type::u16,
@@ -358,6 +379,7 @@ pub fn render() {
                                 Type::i32 => Type::u32,
                                 Type::f32 => Type::i32,
                                 Type::String => Type::f32,
+                                Type::ToD => Type::String,
                             }
                         }
                         _ => {}
@@ -555,9 +577,11 @@ pub fn render() {
     for (index, (line, content)) in lines
         .into_iter()
         .skip(1)
-        .zip(ITEMS.borrow_mut().iter_mut())
+        .zip(ITEMS.borrow_mut().iter_mut().skip(unsafe { scroll_offset }))
         .enumerate()
+        .take(state.settings.max_lines)
     {
+        let index = index + unsafe { scroll_offset };
         content.update();
         let _ = write!(line.begin(), "{:?}", content);
         line.selected = index == unsafe { cursor };
