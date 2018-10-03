@@ -1,3 +1,8 @@
+# Oct 2, 2018
+- Re-align text in main menu
+- Add Rupee Flag modifier
+- Add Drop Shadow Setting
+
 # Oct 1, 2018
 - Add Warping menu
 - Add Reload Area/Room Cheat

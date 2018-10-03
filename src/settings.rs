@@ -143,6 +143,7 @@ pub fn render() {
     const CARD_SAVE: usize = 0;
     const CARD_LOAD: usize = 1;
     const DEFAULTS: usize = 2;
+    const DROP_SHADOW: usize = 4;
 
     let state = unsafe { get_state() };
     let lines = state.menu.lines_mut();
@@ -154,7 +155,7 @@ pub fn render() {
         return;
     }
 
-    let contents = ["Save Card", "Load Card", "Restore Defaults"];
+    let contents = ["Save Card", "Load Card", "Restore Defaults", "", "Drop Shadow"];
 
     move_cursor(contents.len(), unsafe { &mut cursor });
 
@@ -189,6 +190,9 @@ pub fn render() {
                 DEFAULTS => {
                     defaults();
                 }
+                DROP_SHADOW => {
+                    state.settings.drop_shadow = !state.settings.drop_shadow;
+                }
                 _ => {
                     unreachable!();
                 }
@@ -197,7 +201,10 @@ pub fn render() {
     }
 
     for (index, (line, &content)) in lines.iter_mut().zip(&contents).enumerate() {
-        let _ = write!(line.begin(), "{}", content);
+        let _ = match index {
+            DROP_SHADOW => write!(line.begin(), "{}: {}", content, state.settings.drop_shadow),
+            _ => write!(line.begin(), "{}", content)
+        };
         line.selected = index == unsafe { cursor };
     }
 }

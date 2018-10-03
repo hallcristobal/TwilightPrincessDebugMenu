@@ -1,5 +1,6 @@
 use core::fmt::Write;
 use libtp::system::boss_flags_value;
+use libtp::link::Inventory;
 
 use utils::*;
 use {controller, get_state, visible, warping};
@@ -15,10 +16,11 @@ pub fn render() {
     const MEMORY_INDEX: usize = 3;
     const SETTINGS_INDEX: usize = 4;
     const QUICK_WARP_INDEX: usize = 6;
-    const BOSS_FLAGS_INDEX: usize = 8;
-    const ALTER_BOSS_FLAGS_INDEX: usize = 9;
+    const ALTER_BOSS_FLAGS_INDEX: usize = 8;
+    const ALTER_RUPEE_TEXT_INDEX: usize = 9;
 
     let state = unsafe { get_state() };
+    let inventory = Inventory::get_inventory();
     let boss_flags = boss_flags_value();
     let lines = state.menu.lines_mut();
     let pressed_a = controller::A.is_pressed();
@@ -40,8 +42,8 @@ pub fn render() {
         "",
         "Quick Warp",
         "",
-        "Boss Flags: ",
         "Set/Clear Boss Flags",
+        "Set/Clear Rupee Text",
     ];
 
     move_cursor(contents.len(), unsafe { &mut cursor });
@@ -78,7 +80,13 @@ pub fn render() {
                 } else {
                     *boss_flags = 0;
                 }
-                return;
+            }
+            ALTER_RUPEE_TEXT_INDEX => {
+                if inventory.rupee_cs_flags == 0 {
+                    inventory.rupee_cs_flags = 0xFF;
+                } else {
+                    inventory.rupee_cs_flags = 0;
+                }
             }
             _ => {}
         }
@@ -86,7 +94,8 @@ pub fn render() {
 
     for (index, (line, &content)) in lines.iter_mut().zip(&contents).enumerate() {
         let _ = match index {
-            BOSS_FLAGS_INDEX => write!(line.begin(), "{}: {}", content, boss_flags),
+            ALTER_BOSS_FLAGS_INDEX => write!(line.begin(), "{}: {}", content, boss_flags),
+            ALTER_RUPEE_TEXT_INDEX => write!(line.begin(), "{}: {:02X}", content, inventory.rupee_cs_flags),
             _ => write!(line.begin(), "{}", content),
         };
         line.selected = index == unsafe { cursor };
