@@ -1,3 +1,4 @@
+[![Waffle.io - Columns and their card count](https://badge.waffle.io/hallcristobal/TwilightPrincessDebugMenu.svg?columns=Inbox&style=flat)](https://waffle.io/hallcristobal/TwilightPrincessDebugMenu)
 # Twilight Princess Debug Menu / Practice Tool
 
 ## Compiling
