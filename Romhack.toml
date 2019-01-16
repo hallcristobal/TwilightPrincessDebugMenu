@@ -10,9 +10,9 @@ patch = "src/patch.asm"
 map = "map/Final/Release/frameworkF.map"
 
 [build]
-map = "C:/Users/Cristobal/Documents/Dolphin Emulator/Maps/GZ2E01.map"
+map = "G:/Users/crish/Documents/Dolphin Emulator/Maps/GZLJ01.map"
 iso = "target/tpgz.iso"
 
 [link]
-entries = ["draw", "game_loop", "read_controller"]
+entries = ["draw", "game_loop", "read_controller", "init_once"]
 base = "0x8046_0000"

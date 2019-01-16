@@ -1,6 +1,7 @@
 use arrayvec::ArrayVec;
 use core::fmt::Write;
 use libtp::link::{Inventory, Link};
+use libtp::system::LINK_ROLL_CONSTANTS;
 
 use utils::*;
 use {commands, controller};
@@ -9,7 +10,7 @@ static mut cursor: usize = 0;
 static mut scroll_offset: usize = 0;
 static mut already_pressed_a: bool = false;
 
-pub const CHEAT_AMNT: usize = 8;
+pub const CHEAT_AMNT: usize = 10;
 
 pub fn transition_into() {
     unsafe {
@@ -28,6 +29,7 @@ enum CheatId {
     MoonJumpEnabled,
     TeleportEnabled,
     ReloadArea,
+    FastRolling,
 }
 
 #[derive(Serialize, Deserialize, Clone)]
@@ -58,7 +60,9 @@ pub fn apply_cheats() {
                 Invincible => {
                     link.heart_quarters = (link.heart_pieces / 5) * 4;
                 }
-                InvincibleEnemies => {}
+                InvincibleEnemies => {
+                    libtp::system::memory::write::<u32>(0x8008_7F28, 0x4BF7_D158);
+                }
                 InfiniteAir => {
                     let mut air = Link::get_air();
                     *air = 600;
@@ -88,9 +92,13 @@ pub fn apply_cheats() {
                 ReloadArea => unsafe {
                     commands::COMMANDS[commands::RELOAD_AREA].active = true;
                 },
+                FastRolling => unsafe { LINK_ROLL_CONSTANTS.roll_factor = 3.0 },
             }
         } else {
             match cheat.id {
+                InvincibleEnemies => {
+                    libtp::system::memory::write::<u32>(0x8008_7F28, 0xA81B_0562);
+                }
                 MoonJumpEnabled => unsafe {
                     commands::COMMANDS[commands::MOON_JUMP].active = false;
                 },
@@ -105,6 +113,9 @@ pub fn apply_cheats() {
                 ReloadArea => unsafe {
                     commands::COMMANDS[commands::RELOAD_AREA].active = false;
                 },
+                FastRolling => unsafe {
+                    LINK_ROLL_CONSTANTS.roll_factor = 1.3;
+                },
                 _ => {}
             }
         }
@@ -113,7 +124,7 @@ pub fn apply_cheats() {
 
 static mut ITEMS: [Cheat; CHEAT_AMNT] = [
     Cheat::new(Invincible, "Invincible", true),
-    // Cheat::new(InvincibleEnemies, "Invincible Enemies", true),
+    Cheat::new(InvincibleEnemies, "Invincible Enemies", true),
     Cheat::new(InfiniteAir, "Infinite Air", true),
     Cheat::new(InifinteBombs, "Infinite Bombs", true),
     Cheat::new(InfiniteRupees, "Infinite Rupees", true),
@@ -121,6 +132,7 @@ static mut ITEMS: [Cheat; CHEAT_AMNT] = [
     Cheat::new(MoonJumpEnabled, "Moon Jump Enabled", true),
     Cheat::new(TeleportEnabled, "Teleport Enabled", true),
     Cheat::new(ReloadArea, "Reload Area", true),
+    Cheat::new(FastRolling, "Fast Rolling", true),
 ];
 
 use self::CheatId::*;

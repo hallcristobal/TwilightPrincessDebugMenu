@@ -1,5 +1,5 @@
-; [cDyl_InitAsync()] + 0x30:
-; b init
+[cDyl_InitAsync()] + 0x30:
+b init_once
 
 0x8033a0b0:
 ; lis r3, 0x8050 ; set Arena low to 0x80507be0
