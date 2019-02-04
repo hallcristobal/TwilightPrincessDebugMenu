@@ -42,6 +42,8 @@ ENJOY!
 
 ## Cheats
 - A to Activate / Deactivate
+- !!! Currently the Infinite Enemy Health Cheat is finicky; it can be enabled on the fly
+however when disabled the area will have to be reloaded or if that doesn't work soft reset
 
 ## Warping
 ![#f03c15](https://placehold.it/15/f03c15/000000?text=+) Warning! Modifying the

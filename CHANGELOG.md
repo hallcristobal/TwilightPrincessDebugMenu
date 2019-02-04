@@ -1,3 +1,7 @@
+# Jan 16, 2018
+- Add Super Speed Rolling Cheat
+- Enable Invincible Enemy Cheat (Experimental - Direct Replica of DB's Gecko Code)
+
 # Oct 2, 2018
 - Re-align text in main menu
 - Add Rupee Flag modifier

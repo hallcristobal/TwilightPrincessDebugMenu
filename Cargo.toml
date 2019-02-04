@@ -12,7 +12,7 @@ panic = "abort"
 
 [profile.release]
 panic = "abort"
-lto = true
+lto = false
 
 [dependencies]
 arrayvec = { version = "0.4.7", default-features = false, features = ["serde-1"] }

@@ -10,7 +10,7 @@ patch = "src/patch.asm"
 map = "map/Final/Release/frameworkF.map"
 
 [build]
-map = "G:/Users/crish/Documents/Dolphin Emulator/Maps/GZLJ01.map"
+map = "target/GZLJ01.map"
 iso = "target/tpgz.iso"
 
 [link]
