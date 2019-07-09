@@ -1,5 +1,6 @@
 use super::super::get_state;
 use core::fmt::Write;
+use libtp::link::Link;
 
 use controller;
 use utils::{move_cursor, transition, MenuState};
@@ -10,13 +11,12 @@ static mut cursor: usize = 0;
 
 pub fn transition_into() {}
 
-const MENU_ITEM_INVENTORY: usize = 0;
-const MENU_ITEM_QUEST: usize = 1;
-const MENU_ITEM_AMOUNTS: usize = 2;
+const MENU_ITEM_RUPEES: usize = 0;
 
-const ITEMS: [&str; 3] = ["Item Wheel", "Collection Menu", "Amounts"];
+const ITEMS: [&str; 1] = ["Rupees"];
 
 pub fn render() {
+    let link = Link::get_link();
     let state = unsafe { get_state() };
     let lines = state.menu.lines_mut();
     let pressed_b = controller::B.is_pressed();
@@ -30,28 +30,15 @@ pub fn render() {
         return;
     }
 
-    if pressed_a {
-        unsafe {
-            if cursor == MENU_ITEM_INVENTORY {
-                inv_menu_state = InventoryMenu::Equipment;
-                transition(MenuState::InventoryMenu);
-                return;
-            } else if cursor == MENU_ITEM_QUEST {
-                inv_menu_state = InventoryMenu::Quest;
-                transition(MenuState::InventoryMenu);
-            } else if cursor == MENU_ITEM_AMOUNTS {
-                  inv_menu_state = InventoryMenu::Amounts;
-                  transition(MenuState::InventoryMenu);
-                  return;
-              }
-        }
-    }
-
     move_cursor(ITEMS.len(), unsafe { &mut cursor });
 
     for (index, (line, item)) in lines.into_iter().zip(ITEMS.iter()).enumerate() {
         let index = index;
-        let _ = write!(line.begin(), "{}", item);
+        let _ = match index {
+            MENU_ITEM_RUPEES => write!(line.begin(), "{}: {}", item, link.rupees),
+            _ => write!(line.begin(), "")
+        };
+
         if index == unsafe { cursor } {
             line.selected = true;
         }

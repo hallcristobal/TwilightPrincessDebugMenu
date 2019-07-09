@@ -160,44 +160,44 @@ pub fn render() {
     move_cursor(contents.len(), unsafe { &mut cursor });
 
     if pressed_a {
-        unsafe {
-            report!("Hello");
-            match cursor {
-                CARD_SAVE => {
-                    let cheats = cheats();
-                    let items = ::memory::ITEMS.borrow();
-                    let active_c = cheats
-                        .iter()
-                        .map(|c| c.active)
-                        .collect::<ArrayVec<[_; CHEAT_AMNT]>>();
-                    match Card::create("tpgz01") {
-                        Err(e) => report!("Failed to create card: {:?}", e),
-                        Ok(mut card) => {
-                            match card.serialize_write(&SaveLayout(items.clone(), active_c)) {
-                                Ok(_) => report!("Wrote to mem card"),
-                                Err(e) => report!("Failed to write mem card: {:?}", e),
-                            }
-                        }
-                    }
-                }
-                CARD_LOAD => match Card::open("tpgz01") {
-                    Ok(mut card) => match card.deserialize_read(unpack_save) {
-                        Ok(_) => report!("Read mem card"),
-                        Err(e) => report!("Failed to read mem card: {:?}", e),
-                    },
-                    Err(e) => report!("Failed to open mem card: {:?}", e),
-                },
-                DEFAULTS => {
-                    defaults();
-                }
-                DROP_SHADOW => {
-                    state.settings.drop_shadow = !state.settings.drop_shadow;
-                }
-                _ => {
-                    unreachable!();
-                }
-            }
-        }
+        // unsafe {
+        //     report!("Hello");
+        //     match cursor {
+        //         CARD_SAVE => {
+        //             let cheats = cheats();
+        //             let items = ::memory::ITEMS.borrow();
+        //             let active_c = cheats
+        //                 .iter()
+        //                 .map(|c| c.active)
+        //                 .collect::<ArrayVec<[_; CHEAT_AMNT]>>();
+        //             match Card::create("tpgz01") {
+        //                 Err(e) => report!("Failed to create card: {:?}", e),
+        //                 Ok(mut card) => {
+        //                     match card.serialize_write(&SaveLayout(items.clone(), active_c)) {
+        //                         Ok(_) => report!("Wrote to mem card"),
+        //                         Err(e) => report!("Failed to write mem card: {:?}", e),
+        //                     }
+        //                 }
+        //             }
+        //         }
+        //         CARD_LOAD => match Card::open("tpgz01") {
+        //             Ok(mut card) => match card.deserialize_read(unpack_save) {
+        //                 Ok(_) => report!("Read mem card"),
+        //                 Err(e) => report!("Failed to read mem card: {:?}", e),
+        //             },
+        //             Err(e) => report!("Failed to open mem card: {:?}", e),
+        //         },
+        //         DEFAULTS => {
+        //             defaults();
+        //         }
+        //         DROP_SHADOW => {
+        //             state.settings.drop_shadow = !state.settings.drop_shadow;
+        //         }
+        //         _ => {
+        //             unreachable!();
+        //         }
+        //     }
+        // }
     }
 
     for (index, (line, &content)) in lines.iter_mut().zip(&contents).enumerate() {

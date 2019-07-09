@@ -15,7 +15,7 @@ pub const LOAD_POSITION: usize = 1;
 pub const MOON_JUMP: usize = 2;
 pub const RELOAD_AREA: usize = 3;
 
-pub static mut COMMANDS: [Command; 4] = [
+pub static mut COMMANDS: [Command; 5] = [
     Command {
         active: true,
         buttons: 0x0028,
@@ -36,6 +36,11 @@ pub static mut COMMANDS: [Command; 4] = [
         buttons: 0x1160,
         command: reload_area,
     },
+    Command {
+        active: true,
+        buttons: 0x0360,
+        command: load_gorge_void,
+    }
 ];
 
 static mut saved_x: f32 = 0.0;
@@ -122,4 +127,7 @@ pub fn process_inputs() {
             }
         });
     }
+}
+
+fn load_gorge_void() {
 }
