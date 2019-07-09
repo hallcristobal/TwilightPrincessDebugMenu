@@ -10,7 +10,7 @@ static mut cursor: usize = 0;
 static mut scroll_offset: usize = 0;
 static mut already_pressed_a: bool = false;
 
-pub const CHEAT_AMNT: usize = 10;
+pub const CHEAT_AMNT: usize = 11;
 
 pub fn transition_into() {
     unsafe {
@@ -23,6 +23,7 @@ enum CheatId {
     Invincible,
     InvincibleEnemies,
     InfiniteAir,
+    InfiniteOil,
     InifinteBombs,
     InfiniteRupees,
     InfiniteArrows,
@@ -66,6 +67,9 @@ pub fn apply_cheats() {
                 InfiniteAir => {
                     let mut air = Link::get_air();
                     *air = 600;
+                }
+                InfiniteOil => {
+                    link.lamp_fuel = 0x5460;
                 }
                 InifinteBombs => {
                     inventory.bomb_bag_1_amnt = 99;
@@ -126,6 +130,7 @@ static mut ITEMS: [Cheat; CHEAT_AMNT] = [
     Cheat::new(Invincible, "Invincible", true),
     Cheat::new(InvincibleEnemies, "Invincible Enemies", true),
     Cheat::new(InfiniteAir, "Infinite Air", true),
+    Cheat::new(InfiniteOil, "Infinite Oil", true),
     Cheat::new(InifinteBombs, "Infinite Bombs", true),
     Cheat::new(InfiniteRupees, "Infinite Rupees", true),
     Cheat::new(InfiniteArrows, "Infinite Arrows", true),

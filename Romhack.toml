@@ -10,7 +10,7 @@ patch = "src/patch.asm"
 map = "map/Final/Release/frameworkF.map"
 
 [build]
-map = "target/GZLJ01.map"
+map = "target/GZ2E01.map"
 iso = "target/tpgz.iso"
 
 [link]
